@@ -17,13 +17,13 @@ delete_prop() {
   $RESETPROP --delete "$1" 2>/dev/null
 }
 
-# Exact FreeRecharge module logic (works on FreeCharge) - universal for ALL apps
+# Exact FreeRecharge module logic (1:1 from reference zip post-fs-data.sh)
 apply_freecharge_core() {
   reset_ro ro.kernel.qemu 0
   reset_ro ro.boot.qemu 0
   reset_ro qemu.hw.mainkeys 0
   reset_ro init.svc.qemud stopped
-  reset_ro ro.kernel.android.qemud ""
+  reset_ro ro.kernel.android.qemud null
   reset_ro ro.build.characteristics nosdcard
   reset_ro ro.boot.mode normal
   reset_ro ro.hardware pixel
