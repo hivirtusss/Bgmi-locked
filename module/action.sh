@@ -1,28 +1,20 @@
 #!/system/bin/sh
 MODDIR=${0%/*}
 
-echo "=== Universal Root Hide (ALL UPI Apps) ==="
+echo "=== Universal Root Hide v3.1 SAFE ==="
 echo
-echo "Active profile:"
-grep '^profile=' "$MODDIR/profile.conf" 2>/dev/null || echo "  profile=pixel9proxl (default)"
+echo "Boot safety:"
+echo "  skip_mount=$(test -f $MODDIR/skip_mount && echo YES || echo NO)"
+echo "  late_file_hide=$(grep late_file_hide $MODDIR/profile.conf 2>/dev/null)"
+echo "  boot.log=$(test -f $MODDIR/boot.log && echo present || echo none)"
 echo
-echo "Available profiles (edit profile.conf + reboot):"
-echo "  pixel7      -> Pixel 7 (panther)"
-echo "  pixel7pro   -> Pixel 7 Pro (cheetah)"
-echo "  pixel8pro   -> Pixel 8 Pro (husky)"
-echo "  pixel9      -> Pixel 9 (tokay)"
-echo "  pixel9a     -> Pixel 9a (akita)"
-echo "  pixel9proxl -> Pixel 9 Pro XL (pantah) [FreeCharge default]"
+echo "Profile:"
+grep '^profile=' "$MODDIR/profile.conf" 2>/dev/null || echo "  profile=pixel9proxl"
 echo
-echo "Current spoofed device:"
-for key in ro.product.model ro.product.device ro.build.fingerprint ro.build.type; do
+echo "Spoofed device:"
+for key in ro.product.model ro.product.device ro.build.fingerprint ro.kernel.qemu ro.debuggable; do
   echo "  $key=$(getprop $key)"
 done
 echo
-echo "Root / emulator hide (all apps):"
-for key in ro.kernel.qemu ro.boot.qemu ro.debuggable ro.secure ro.dalvik.vm.native.bridge; do
-  echo "  $key=$(getprop $key)"
-done
-echo
-echo "UPI apps covered: FreeCharge BharatPe Paytm PhonePe GPay YesPay LXME IND + all"
-echo "Tip: KernelSU -> app -> Unmount modules + Hide root"
+echo "If bootloop: disable module in KernelSU safe mode"
+echo "Or set file_hide=0 in profile.conf and reboot"

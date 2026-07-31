@@ -2,9 +2,28 @@
 
 **FreeRecharge zip ka logic** + **sab UPI apps** + **6 Pixel device profiles** — ek hi zip, sab emulators/devices.
 
+## Bootloop-safe v3.1
+
+**No bootloop design** — FreeRecharge jaisa sirf props early boot pe; file hide late boot pe.
+
+| Safety | Detail |
+|--------|--------|
+| `skip_mount` | `/system` overlay kabhi mount nahi |
+| No `/system` bind | `/system/bin/su` wagaira touch nahi — bootloop reason #1 |
+| Late file hide | `service.sh` mein 5s wait ke baad |
+| All errors ignored | `set +e` + `\|\| true` everywhere |
+| Recovery | `file_hide=0` in profile.conf if issues |
+
+### Agar bootloop ho (recovery)
+
+1. KernelSU safe mode → module disable
+2. Ya adb: `touch /data/adb/modules/universal_root_hide/disable` → reboot
+3. Ya `profile.conf` mein `file_hide=0` → reboot
+
 ## Download
 
-`dist/UniversalRootHide-KernelSU-v3.0.0.zip`
+`dist/UniversalRootHide-KernelSU-v3.1.0-safe.zip`
+
 
 ```bash
 ./build.sh

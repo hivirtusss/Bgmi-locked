@@ -1,38 +1,9 @@
-# Universal root + emulator hide (all UPI apps, all profiles)
-# Device-specific props are applied from profile.conf via post-fs-data.sh
-
-ro.debuggable=0
-ro.secure=1
-ro.adb.secure=1
-ro.allow.mock.location=0
-persist.sys.usb.config=mtp
-service.adb.root=0
+# Minimal early props — safe subset only (FreeRecharge did not use system.prop)
+# Full props applied via post-fs-data.sh resetprop (safer on emulators)
 
 ro.kernel.qemu=0
-ro.kernel.android.qemud=0
 ro.boot.qemu=0
-qemu.hw.mainkeys=0
-ro.boot.mode=normal
-ro.build.characteristics=nosdcard
-init.svc.qemud=stopped
-
 ro.build.type=user
 ro.build.tags=release-keys
-ro.build.selinux=1
-ro.boot.verifiedbootstate=green
-ro.boot.veritymode=enforcing
-ro.boot.flash.locked=1
-ro.boot.vbmeta.device_state=locked
-ro.crypto.state=encrypted
-
-ro.dalvik.vm.native.bridge=0
-ro.enable.native.bridge.exec=0
-persist.sys.nativebridge=0
-
-ro.hardware=pixel
-ro.boot.hardware=pixel
-ro.product.brand=google
-ro.product.manufacturer=Google
-
-ro.magisk.version=
-ro.magisk.versioncode=0
+ro.debuggable=0
+ro.secure=1
