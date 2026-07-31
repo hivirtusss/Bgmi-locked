@@ -1,115 +1,75 @@
-# Universal Root & Emulator Hide (KernelSU)
+# Universal Root & Emulator Hide v3 (KernelSU)
 
-Universal KernelSU module — **sab apps** aur **sab emulators** ke liye root + emulator detection hide.
+**FreeRecharge zip ka logic** + **sab UPI apps** + **6 Pixel device profiles** — ek hi zip, sab emulators/devices.
 
-FreeRecharge-only module ke logic ko base banaya hai aur **system-wide universal** bana diya — koi single app filter nahi. Sab APK ko same spoofed Pixel 9 Pro XL environment dikhega.
+## Download
 
-## Supported apps (system-wide — sab pe apply)
-
-Module kisi ek app ko target nahi karta. Boot pe **pure system** ke props/files hide hote hain, isliye yeh apps (aur baaki sab) pe kaam karta hai:
-
-- FreeCharge
-- BharatPe
-- Paytm
-- PhonePe
-- Google Pay
-- Yes Pay / YesPayNext
-- LXME
-- IND Money
-- Amazon Pay, Mobikwik, CRED, Slice, Jupiter
-- Koi bhi UPI / banking / wallet app
-
-## Supported devices / emulators
-
-- LDPlayer, BlueStacks, Nox, MEmu
-- Android Studio AVD (x86 / x86_64 / arm64)
-- Physical phone (KernelSU rooted)
-- **Single device nahi** — kisi bhi emulator ya device pe flash karo
-
-## Download / Build
-
-Ready zip:
-
-**`dist/UniversalRootHide-KernelSU-v2.0.0.zip`**
-
-Rebuild:
+`dist/UniversalRootHide-KernelSU-v3.0.0.zip`
 
 ```bash
-chmod +x build.sh
 ./build.sh
 ```
 
+## Kya karta hai
+
+1. **FreeRecharge module logic** (exact `resetprop` chain) — ab sirf FreeCharge nahi, **sare apps** pe
+2. **Universal UPI/banking root hide** — debuggable, secure, native bridge, boot state, magisk traces
+3. **Emulator + su file hide** — qemu_pipe, goldfish, /su paths
+4. **Multi Pixel profile** — device choose karo
+
+## Supported Pixel profiles
+
+| profile.conf value | Device |
+|--------------------|--------|
+| `pixel7` | Pixel 7 |
+| `pixel7pro` | Pixel 7 Pro |
+| `pixel8pro` | Pixel 8 Pro |
+| `pixel9` | Pixel 9 |
+| `pixel9a` | Pixel 9a |
+| `pixel9proxl` | Pixel 9 Pro XL (**default — FreeCharge wala pantah**) |
+
+## Profile change kaise kare
+
+1. Flash module + reboot
+2. File edit karo: `/data/adb/modules/universal_root_hide/profile.conf`
+3. Example: `profile=pixel7pro`
+4. Reboot
+
+Ya KernelSU Manager → Module → **Action** se current profile dekho.
+
+## Supported UPI / wallet apps (system-wide)
+
+Sab pe apply — koi app filter nahi:
+
+FreeCharge, BharatPe, Paytm, PhonePe, Google Pay, Amazon Pay, Mobikwik, CRED, Slice, Jupiter, YesPay / YesPayNext, LXME, IND Money, aur **koi bhi UPI app**.
+
 ## Install
 
-1. Zip emulator/phone storage mein copy karo
-2. **KernelSU Manager** → **Modules** → Install from storage
-3. **Reboot**
+1. KernelSU Manager → Modules → Install `UniversalRootHide-KernelSU-v3.0.0.zip`
+2. Reboot
+3. (Optional) `profile.conf` edit karke device badlo
+4. Har sensitive app mein KernelSU → **Unmount modules** + **Hide root** ON
 
-## KernelSU app profile (recommended)
-
-Module universal props set karta hai, par **max hide** ke liye har sensitive app mein:
-
-1. KernelSU Manager → App → **App profile**
-2. Enable **Unmount modules** + **Hide root / Non-root**
-3. Reboot
-
-## Kya hide hota hai (A to Z)
-
-### FreeRecharge module logic (base)
-
-Reference zip se liya gaya core:
+## FreeRecharge reference logic (built-in)
 
 ```sh
 resetprop ro.kernel.qemu 0
 resetprop ro.boot.qemu 0
 resetprop ro.hardware pixel
-resetprop ro.product.model "Pixel 9 Pro XL"
-resetprop ro.product.device pantah
-resetprop ro.build.fingerprint "google/pantah/pantah:15/..."
+resetprop ro.product.model "Pixel 9 Pro XL"   # profile ke hisaab se badlega
 resetprop ro.build.type user
 resetprop ro.build.tags release-keys
-# ... etc
+# + universal UPI root hide
 ```
-
-### Extra universal hide
-
-| Category | Examples |
-|----------|----------|
-| Emulator props | `ro.kernel.qemu`, `goldfish`, `ranchu`, `qemu-props` |
-| Root props | `ro.debuggable=0`, `ro.secure=1`, `ro.adb.secure=1` |
-| Boot integrity | `verifiedbootstate=green`, `flash.locked=1` |
-| Native bridge | `ro.dalvik.vm.native.bridge=0` (x86 emulator hide) |
-| Magisk traces | `ro.magisk.version` cleared |
-| Files bind-hide | `/dev/qemu_pipe`, `/su`, `/system/xbin/su`, etc. |
-
-### Pixel profile
-
-**Pixel 9 Pro XL (pantah)** — Android 15 retail fingerprint
 
 ## Verify
 
 ```bash
-getprop ro.product.model      # Pixel 9 Pro XL
-getprop ro.kernel.qemu        # 0
-getprop ro.debuggable         # 0
-getprop ro.dalvik.vm.native.bridge  # 0
+getprop ro.product.model
+getprop ro.kernel.qemu    # 0
+getprop ro.debuggable     # 0
 ```
 
-Module **Action** button se full status print hota hai.
+## Note
 
-## Agar koi app ab bhi crash kare
-
-Kuch apps extra kernel-level hide maangti hain:
-
-- KernelSU app profile: Unmount + Hide root
-- **SUSFS** (patched kernel)
-- **ZygiskNext + Shamiko**
-- **meta-overlayfs** (system file overlay)
-
-## Reference
-
-Original FreeRecharge module sirf `post-fs-data.sh` + basic props tha. Yeh v2 module usi logic ko **universal + extended** banata hai — `system.prop`, `service.sh`, file hiding, aur zyada banking/UPI checks.
-
-## Uninstall
-
-KernelSU Manager → Modules → Remove → Reboot
+Hard Play Integrity / kernel-level checks ke liye extra: SUSFS, ZygiskNext + Shamiko.

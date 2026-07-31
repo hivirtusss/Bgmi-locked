@@ -1,32 +1,5 @@
-# Universal hide - Pixel 9 Pro XL (pantah) retail profile
-# Logic based on FreeRecharge module, expanded for all apps/emulators
-
-ro.product.model=Pixel 9 Pro XL
-ro.product.name=pantah
-ro.product.device=pantah
-ro.product.brand=google
-ro.product.manufacturer=Google
-ro.product.board=pantah
-ro.build.product=pantah
-ro.hardware=pixel
-ro.boot.hardware=pixel
-ro.vendor.product.device=pantah
-
-ro.build.fingerprint=google/pantah/pantah:15/AP3A.241005.015/1234567:user/release-keys
-ro.bootimage.build.fingerprint=google/pantah/pantah:15/AP3A.241005.015/1234567:user/release-keys
-ro.vendor.build.fingerprint=google/pantah/pantah:15/AP3A.241005.015/1234567:user/release-keys
-ro.system.build.fingerprint=google/pantah/pantah:15/AP3A.241005.015/1234567:user/release-keys
-ro.odm.build.fingerprint=google/pantah/pantah:15/AP3A.241005.015/1234567:user/release-keys
-
-ro.build.type=user
-ro.build.tags=release-keys
-ro.build.flavor=pantah-user
-ro.build.characteristics=nosdcard
-ro.build.description=pantah-user 15 AP3A.241005.015 1234567 release-keys
-ro.build.display.id=AP3A.241005.015
-ro.build.version.release=15
-ro.build.version.sdk=35
-ro.build.version.security_patch=2024-10-05
+# Universal root + emulator hide (all UPI apps, all profiles)
+# Device-specific props are applied from profile.conf via post-fs-data.sh
 
 ro.debuggable=0
 ro.secure=1
@@ -35,38 +8,31 @@ ro.allow.mock.location=0
 persist.sys.usb.config=mtp
 service.adb.root=0
 
-# Emulator indicators (FreeRecharge logic + extras)
 ro.kernel.qemu=0
 ro.kernel.android.qemud=0
 ro.boot.qemu=0
-ro.boot.qemu.avd_name=
-ro.boot.qemu.vsync=0
-ro.boot.qemu.settings.system.screen_off_timeout=0
 qemu.hw.mainkeys=0
 ro.boot.mode=normal
-
+ro.build.characteristics=nosdcard
 init.svc.qemud=stopped
-init.svc.qemu-props=
-init.svc.goldfish-logcat=
-init.svc.goldfish-setup=
 
-# Root / tamper / integrity indicators
+ro.build.type=user
+ro.build.tags=release-keys
 ro.build.selinux=1
 ro.boot.verifiedbootstate=green
 ro.boot.veritymode=enforcing
 ro.boot.flash.locked=1
 ro.boot.vbmeta.device_state=locked
-ro.boot.warranty_bit=0
-ro.warranty_bit=0
-ro.is_ever_orange=0
-ro.bootmode=unknown
 ro.crypto.state=encrypted
 
-# Native bridge / emulator runtime flags
 ro.dalvik.vm.native.bridge=0
 ro.enable.native.bridge.exec=0
 persist.sys.nativebridge=0
 
-# Hide common root manager traces in props
+ro.hardware=pixel
+ro.boot.hardware=pixel
+ro.product.brand=google
+ro.product.manufacturer=Google
+
 ro.magisk.version=
 ro.magisk.versioncode=0

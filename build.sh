@@ -4,10 +4,10 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 MODULE_DIR="$ROOT/module"
 OUT_DIR="$ROOT/dist"
-ZIP_NAME="UniversalRootHide-KernelSU-v2.0.0.zip"
+ZIP_NAME="UniversalRootHide-KernelSU-v3.0.0.zip"
 
 mkdir -p "$OUT_DIR"
-rm -f "$OUT_DIR/$ZIP_NAME" "$OUT_DIR/EmulatorRootFix-KernelSU-v1.0.0.zip"
+rm -f "$OUT_DIR"/UniversalRootHide-KernelSU-*.zip
 
 (
   cd "$MODULE_DIR"

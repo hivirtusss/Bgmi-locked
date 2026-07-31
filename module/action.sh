@@ -1,25 +1,28 @@
 #!/system/bin/sh
 MODDIR=${0%/*}
 
-echo "=== Universal Root & Emulator Hide ==="
-echo "Scope: ALL apps (system-wide props + file hide)"
+echo "=== Universal Root Hide (ALL UPI Apps) ==="
 echo
-echo "Pixel 9 Pro XL props:"
-for key in ro.product.model ro.product.device ro.hardware ro.build.fingerprint ro.build.type ro.build.tags; do
-  echo "  $key=$(getprop "$key")"
+echo "Active profile:"
+grep '^profile=' "$MODDIR/profile.conf" 2>/dev/null || echo "  profile=pixel9proxl (default)"
+echo
+echo "Available profiles (edit profile.conf + reboot):"
+echo "  pixel7      -> Pixel 7 (panther)"
+echo "  pixel7pro   -> Pixel 7 Pro (cheetah)"
+echo "  pixel8pro   -> Pixel 8 Pro (husky)"
+echo "  pixel9      -> Pixel 9 (tokay)"
+echo "  pixel9a     -> Pixel 9a (akita)"
+echo "  pixel9proxl -> Pixel 9 Pro XL (pantah) [FreeCharge default]"
+echo
+echo "Current spoofed device:"
+for key in ro.product.model ro.product.device ro.build.fingerprint ro.build.type; do
+  echo "  $key=$(getprop $key)"
 done
 echo
-echo "Emulator hide:"
+echo "Root / emulator hide (all apps):"
 for key in ro.kernel.qemu ro.boot.qemu ro.debuggable ro.secure ro.dalvik.vm.native.bridge; do
-  echo "  $key=$(getprop "$key")"
+  echo "  $key=$(getprop $key)"
 done
 echo
-echo "Root / boot state:"
-for key in ro.boot.verifiedbootstate ro.boot.flash.locked ro.boot.vbmeta.device_state; do
-  echo "  $key=$(getprop "$key")"
-done
-echo
-echo "Hidden mounts:"
-mount | grep "$MODDIR/hide" || echo "  (reboot if just installed)"
-echo
-echo "KernelSU tip: enable Unmount modules + Hide root per app for max hide."
+echo "UPI apps covered: FreeCharge BharatPe Paytm PhonePe GPay YesPay LXME IND + all"
+echo "Tip: KernelSU -> app -> Unmount modules + Hide root"

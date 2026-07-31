@@ -1,6 +1,6 @@
 id=universal_root_hide
 name=Universal Root & Emulator Hide
-version=v2.0.0
-versionCode=200
+version=v3.0.0
+versionCode=300
 author=Bgmi-locked
-description=Universal KernelSU module - hides root + emulator detection for ALL apps (FreeCharge, BharatPe, Paytm, PhonePe, YesPay, LXME, IND, UPI, banking). Works on all emulators and devices. Pixel 9 Pro XL spoof + A-Z prop/file hide.
+description=FreeRecharge logic + universal root hide for ALL UPI apps. Multi Pixel profiles: 7, 7 Pro, 8 Pro, 9, 9a, 9 Pro XL. All emulators/devices. BharatPe Paytm PhonePe FreeCharge YesPay LXME IND etc.
