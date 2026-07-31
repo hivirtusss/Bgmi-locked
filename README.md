@@ -1,14 +1,38 @@
-# Emulator Root & Detection Fix (KernelSU Module)
+# Universal Root & Emulator Hide (KernelSU)
 
-KernelSU flashable module for **Android emulators** (LDPlayer, BlueStacks, Android Studio AVD, etc.) where apps crash on launch due to **root** or **emulator detection**.
+Universal KernelSU module — **sab apps** aur **sab emulators** ke liye root + emulator detection hide.
 
-## Download
+FreeRecharge-only module ke logic ko base banaya hai aur **system-wide universal** bana diya — koi single app filter nahi. Sab APK ko same spoofed Pixel 9 Pro XL environment dikhega.
 
-After building, the zip is at:
+## Supported apps (system-wide — sab pe apply)
 
-`dist/EmulatorRootFix-KernelSU-v1.0.0.zip`
+Module kisi ek app ko target nahi karta. Boot pe **pure system** ke props/files hide hote hain, isliye yeh apps (aur baaki sab) pe kaam karta hai:
 
-Build locally:
+- FreeCharge
+- BharatPe
+- Paytm
+- PhonePe
+- Google Pay
+- Yes Pay / YesPayNext
+- LXME
+- IND Money
+- Amazon Pay, Mobikwik, CRED, Slice, Jupiter
+- Koi bhi UPI / banking / wallet app
+
+## Supported devices / emulators
+
+- LDPlayer, BlueStacks, Nox, MEmu
+- Android Studio AVD (x86 / x86_64 / arm64)
+- Physical phone (KernelSU rooted)
+- **Single device nahi** — kisi bhi emulator ya device pe flash karo
+
+## Download / Build
+
+Ready zip:
+
+**`dist/UniversalRootHide-KernelSU-v2.0.0.zip`**
+
+Rebuild:
 
 ```bash
 chmod +x build.sh
@@ -17,66 +41,75 @@ chmod +x build.sh
 
 ## Install
 
-1. Copy the zip to your emulator/device storage.
-2. Open **KernelSU Manager** → **Modules** → **Install from storage**.
-3. Select `EmulatorRootFix-KernelSU-v1.0.0.zip`.
-4. **Reboot** the emulator.
+1. Zip emulator/phone storage mein copy karo
+2. **KernelSU Manager** → **Modules** → Install from storage
+3. **Reboot**
 
-## Required: KernelSU app profile (important)
+## KernelSU app profile (recommended)
 
-This module alone is not enough for all apps. For each app that crashes:
+Module universal props set karta hai, par **max hide** ke liye har sensitive app mein:
 
-1. KernelSU Manager → **Superuser** / **Apps**
-2. Open the app → **App profile**
-3. Enable:
-   - **Unmount modules** (or **Exclude modules**)
-   - **Non-root / Hide root** for that app (wording varies by KernelSU version)
-4. Reboot again
+1. KernelSU Manager → App → **App profile**
+2. Enable **Unmount modules** + **Hide root / Non-root**
+3. Reboot
 
-Without this, KernelSU may still expose root to the app even with props spoofed.
+## Kya hide hota hai (A to Z)
 
-## What this module does
+### FreeRecharge module logic (base)
 
-- Spoofs common **Pixel 7 Pro** retail props via `system.prop` + early `resetprop`
-- Clears/hides **qemu / goldfish / ranchu** style indicators
-- Sets **user / release-keys / secure** flags apps often check
-- Bind-mounts empty stubs over common emulator files:
-  - `/dev/qemu_pipe`
-  - `/dev/goldfish_pipe`
-  - `/dev/socket/qemud`
-  - `/sys/qemu_trace`
-- Re-applies props on late boot via `service.sh`
+Reference zip se liya gaya core:
 
-## If apps still crash
+```sh
+resetprop ro.kernel.qemu 0
+resetprop ro.boot.qemu 0
+resetprop ro.hardware pixel
+resetprop ro.product.model "Pixel 9 Pro XL"
+resetprop ro.product.device pantah
+resetprop ro.build.fingerprint "google/pantah/pantah:15/..."
+resetprop ro.build.type user
+resetprop ro.build.tags release-keys
+# ... etc
+```
 
-Some apps (banking, BGMI-level anti-cheat, Play Integrity) need more layers:
+### Extra universal hide
 
-| Layer | Purpose |
-|-------|---------|
-| **KernelSU app hide** | Hide root from target app |
-| **meta-overlayfs** | Systemless `/system` changes (KernelSU) |
-| **SUSFS + patched kernel** | Kernel-level root hiding |
-| **ZygiskNext + Shamiko** | Zygisk hide (if your KSU build supports it) |
-| **LSPosed hooks** | Runtime `SystemProperties` / file checks |
+| Category | Examples |
+|----------|----------|
+| Emulator props | `ro.kernel.qemu`, `goldfish`, `ranchu`, `qemu-props` |
+| Root props | `ro.debuggable=0`, `ro.secure=1`, `ro.adb.secure=1` |
+| Boot integrity | `verifiedbootstate=green`, `flash.locked=1` |
+| Native bridge | `ro.dalvik.vm.native.bridge=0` (x86 emulator hide) |
+| Magisk traces | `ro.magisk.version` cleared |
+| Files bind-hide | `/dev/qemu_pipe`, `/su`, `/system/xbin/su`, etc. |
 
-This module is the **first baseline fix** for emulators, not a guaranteed bypass for every app.
+### Pixel profile
+
+**Pixel 9 Pro XL (pantah)** — Android 15 retail fingerprint
 
 ## Verify
 
-After reboot, in adb shell or terminal:
-
 ```bash
-getprop ro.kernel.qemu      # should be 0
-getprop ro.product.model    # should be Pixel 7 Pro
-getprop ro.debuggable       # should be 0
+getprop ro.product.model      # Pixel 9 Pro XL
+getprop ro.kernel.qemu        # 0
+getprop ro.debuggable         # 0
+getprop ro.dalvik.vm.native.bridge  # 0
 ```
 
-In KernelSU Manager, tap the module **Action** button to print status.
+Module **Action** button se full status print hota hai.
+
+## Agar koi app ab bhi crash kare
+
+Kuch apps extra kernel-level hide maangti hain:
+
+- KernelSU app profile: Unmount + Hide root
+- **SUSFS** (patched kernel)
+- **ZygiskNext + Shamiko**
+- **meta-overlayfs** (system file overlay)
+
+## Reference
+
+Original FreeRecharge module sirf `post-fs-data.sh` + basic props tha. Yeh v2 module usi logic ko **universal + extended** banata hai — `system.prop`, `service.sh`, file hiding, aur zyada banking/UPI checks.
 
 ## Uninstall
 
-KernelSU Manager → Modules → Remove → Reboot.
-
-## Disclaimer
-
-Use only on devices/emulators you own. Bypassing app security may violate app terms of service. This project is for education and personal testing.
+KernelSU Manager → Modules → Remove → Reboot

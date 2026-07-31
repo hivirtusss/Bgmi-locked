@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Late boot cleanup for stubborn props and emulator files.
+# Re-apply universal props after late boot (all apps, all emulators)
 MODDIR=${0%/*}
 
 if [ -x /data/adb/ksu/bin/resetprop ]; then
@@ -14,13 +14,19 @@ reset_ro() {
   $RESETPROP -n "$1" "$2" 2>/dev/null || $RESETPROP "$1" "$2" 2>/dev/null
 }
 
-# Re-apply critical props after late init.
+# Re-apply critical props (FreeRecharge + extended)
 reset_ro ro.kernel.qemu 0
 reset_ro ro.boot.qemu 0
-reset_ro ro.debuggable 0
-reset_ro ro.secure 1
+reset_ro ro.hardware pixel
+reset_ro ro.product.model "Pixel 9 Pro XL"
+reset_ro ro.product.device pantah
 reset_ro ro.build.type user
 reset_ro ro.build.tags release-keys
+reset_ro ro.debuggable 0
+reset_ro ro.secure 1
+reset_ro ro.dalvik.vm.native.bridge 0
+reset_ro ro.boot.verifiedbootstate green
+reset_ro ro.boot.flash.locked 1
 
 bind_hide_file() {
   target="$1"
@@ -32,15 +38,13 @@ bind_hide_file() {
   mount | grep -Fq " $target " || mount -o bind "$hide" "$target" 2>/dev/null
 }
 
-bind_hide_file /dev/qemu_pipe
-bind_hide_file /dev/goldfish_pipe
-bind_hide_file /dev/socket/qemud
-
-# Best-effort: hide obvious su paths if present (non-systemless fallback).
-for su_path in /su /sbin/su; do
-  [ -e "$su_path" ] || continue
-  hide="$MODDIR/hide/$(echo "$su_path" | tr '/' '_')"
-  mkdir -p "$(dirname "$hide")"
-  [ -f "$hide" ] || : > "$hide"
-  mount | grep -Fq " $su_path " || mount -o bind "$hide" "$su_path" 2>/dev/null
+for path in \
+  /dev/qemu_pipe \
+  /dev/goldfish_pipe \
+  /dev/socket/qemud \
+  /su \
+  /sbin/su \
+  /system/bin/su \
+  /system/xbin/su; do
+  bind_hide_file "$path"
 done

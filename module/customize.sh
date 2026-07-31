@@ -1,9 +1,13 @@
 #!/system/bin/sh
-# KernelSU module installer customization
 
-ui_print "- Emulator Root & Detection Fix"
-ui_print "- Target: KernelSU emulators (x86/x86_64/arm64)"
-ui_print "- After install: reboot, then configure app profiles in KernelSU Manager"
+ui_print "*******************************"
+ui_print " Universal Root & Emulator Hide"
+ui_print " ALL apps | ALL emulators"
+ui_print " Pixel 9 Pro XL spoof"
+ui_print "*******************************"
+ui_print "- FreeCharge logic -> universal"
+ui_print "- BharatPe Paytm PhonePe UPI etc."
+ui_print "- Reboot after install"
 
 set_perm_recursive "$MODPATH" 0 0 0755 0644
 set_perm "$MODPATH/post-fs-data.sh" 0 0 0755

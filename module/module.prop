@@ -1,6 +1,6 @@
-id=emulator_root_fix
-name=Emulator Root & Detection Fix
-version=v1.0.0
-versionCode=100
+id=universal_root_hide
+name=Universal Root & Emulator Hide
+version=v2.0.0
+versionCode=200
 author=Bgmi-locked
-description=Hides emulator fingerprints and common root indicators on KernelSU. Spoofs Pixel-like props, blocks qemu/goldfish signals, and mounts over common emulator detection files. Pair with KernelSU app profile hiding for best results.
+description=Universal KernelSU module - hides root + emulator detection for ALL apps (FreeCharge, BharatPe, Paytm, PhonePe, YesPay, LXME, IND, UPI, banking). Works on all emulators and devices. Pixel 9 Pro XL spoof + A-Z prop/file hide.

@@ -1,23 +1,25 @@
 #!/system/bin/sh
 MODDIR=${0%/*}
 
-echo "=== Emulator Root & Detection Fix ==="
+echo "=== Universal Root & Emulator Hide ==="
+echo "Scope: ALL apps (system-wide props + file hide)"
 echo
-echo "Module path: $MODDIR"
-echo
-echo "Current critical props:"
-for key in ro.kernel.qemu ro.boot.qemu ro.hardware ro.product.model ro.build.type ro.debuggable ro.secure; do
+echo "Pixel 9 Pro XL props:"
+for key in ro.product.model ro.product.device ro.hardware ro.build.fingerprint ro.build.type ro.build.tags; do
   echo "  $key=$(getprop "$key")"
 done
 echo
-echo "Hidden targets:"
-mount | grep "$MODDIR/hide" || echo "  (none mounted yet - reboot if module was just installed)"
+echo "Emulator hide:"
+for key in ro.kernel.qemu ro.boot.qemu ro.debuggable ro.secure ro.dalvik.vm.native.bridge; do
+  echo "  $key=$(getprop "$key")"
+done
 echo
-echo "Required manual steps in KernelSU Manager:"
-echo "  1. Modules -> ensure this module is enabled"
-echo "  2. For each crashing app -> App profile:"
-echo "     - Enable 'Unmount modules' (or 'Exclude modules')"
-echo "     - Enable root hiding / non-root mode for that app"
-echo "  3. Reboot after changing profiles"
+echo "Root / boot state:"
+for key in ro.boot.verifiedbootstate ro.boot.flash.locked ro.boot.vbmeta.device_state; do
+  echo "  $key=$(getprop "$key")"
+done
 echo
-echo "If apps still crash, install meta-overlayfs + SUSFS/ZygiskNext as needed."
+echo "Hidden mounts:"
+mount | grep "$MODDIR/hide" || echo "  (reboot if just installed)"
+echo
+echo "KernelSU tip: enable Unmount modules + Hide root per app for max hide."
