@@ -1,0 +1,51 @@
+# Spoof a real retail device profile (Pixel 7 Pro / Android 14)
+ro.product.model=Pixel 7 Pro
+ro.product.name=cheetah
+ro.product.device=cheetah
+ro.product.brand=google
+ro.product.manufacturer=Google
+ro.product.board=cheetah
+ro.build.product=cheetah
+ro.hardware=cheetah
+ro.boot.hardware=cheetah
+
+ro.build.fingerprint=google/cheetah/cheetah:14/AP2A.240805.005/12025142:user/release-keys
+ro.bootimage.build.fingerprint=google/cheetah/cheetah:14/AP2A.240805.005/12025142:user/release-keys
+ro.vendor.build.fingerprint=google/cheetah/cheetah:14/AP2A.240805.005/12025142:user/release-keys
+ro.system.build.fingerprint=google/cheetah/cheetah:14/AP2A.240805.005/12025142:user/release-keys
+
+ro.build.type=user
+ro.build.tags=release-keys
+ro.build.flavor=cheetah-user
+ro.debuggable=0
+ro.secure=1
+ro.adb.secure=1
+persist.sys.usb.config=none
+
+# Emulator indicators
+ro.kernel.qemu=0
+ro.kernel.android.qemud=0
+ro.boot.qemu=0
+ro.boot.qemu.avd_name=
+ro.boot.qemu.vsync=0
+ro.boot.qemu.settings.system.screen_off_timeout=0
+init.svc.qemud=
+init.svc.qemu-props=
+init.svc.goldfish-logcat=
+init.svc.goldfish-setup=
+
+# Root / tamper indicators
+ro.build.selinux=1
+ro.boot.verifiedbootstate=green
+ro.boot.veritymode=enforcing
+ro.boot.flash.locked=1
+ro.boot.vbmeta.device_state=locked
+ro.boot.warranty_bit=0
+ro.warranty_bit=0
+ro.is_ever_orange=0
+ro.bootmode=unknown
+ro.crypto.state=encrypted
+
+# Hide common Magisk/KSU traces in props (best effort)
+ro.magisk.version=
+ro.magisk.versioncode=0
