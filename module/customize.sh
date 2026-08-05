@@ -1,6 +1,5 @@
 #!/system/bin/sh
 
-# Detect root manager for "Powered by" line
 if [ "$KSU" = "true" ]; then
   POWERED_BY="KernelSU"
 elif [ -n "$APATCH" ]; then
@@ -11,19 +10,11 @@ else
   POWERED_BY="KernelSU"
 fi
 
-# Install destination path
-INSTALL_PATH="$MODPATH"
-[ -z "$INSTALL_PATH" ] && INSTALL_PATH="$NVBASE/modules/$MODID"
-[ -z "$INSTALL_PATH" ] && INSTALL_PATH="/data/adb/modules/$MODID"
-
 ui_print "*******************************"
 ui_print " VirtusFix Premium Root Hide V3 🔝"
 ui_print " by @Hivirtus"
 ui_print " Powered by $POWERED_BY"
 ui_print "*******************************"
-ui_print ""
-ui_print "- Installing to $INSTALL_PATH"
-ui_print "- Extracting module files..."
 ui_print ""
 
 TS=$(date '+%Y-%m-%d %H:%M:%S' 2>/dev/null)
@@ -33,12 +24,8 @@ ui_print "$TS [VIRTUS_INIT] Start"
 ui_print "$TS [SET_TARGET] Writing profile.conf"
 ui_print "$TS [SET_EMU_HIDE] Configuring emulator bypass"
 ui_print "$TS [SET_ROOT_HIDE] Configuring root shield"
-ui_print "$TS [SET_SECURITY] release-keys / user mode"
-ui_print "$TS [SKIP_MOUNT] /system overlay disabled (safe)"
 ui_print "$TS [VIRTUS_INIT] Finish"
 ui_print ""
-ui_print "- Setting permissions..."
-ui_print "- Optimizing module props..."
 
 set_perm_recursive "$MODPATH" 0 0 0755 0644
 set_perm "$MODPATH/post-fs-data.sh" 0 0 0755
@@ -65,13 +52,6 @@ if [ -f "$NVBASE/modules/$MODID/state/detection_status" ]; then
   cp -f "$NVBASE/modules/$MODID/state/detection_status" "$MODPATH/state/detection_status"
 fi
 
-ui_print ""
-ui_print "$TS [PERMISSIONS] Finish"
-ui_print "$TS [INSTALL] Module ready at:"
-ui_print "  $INSTALL_PATH"
-ui_print ""
-ui_print "- Done Install ✅"
-ui_print "- Reboot device to activate"
-ui_print "- Then press Action button 🎯 to fix"
+ui_print "Done Install ✅"
 ui_print ""
 ui_print "Developed By @Hivirtus"
