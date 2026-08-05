@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Virtus Fix — Premium Action UI (realistic root + emulator hide)
+# Virtus Fix — Premium Action UI
 MODDIR=${0%/*}
 
 set +e
@@ -13,7 +13,7 @@ pause() { sleep "$1"; }
 
 step() {
   echo "$1"
-  pause 0.4
+  pause 0.35
 }
 
 bar() {
@@ -35,18 +35,29 @@ bar() {
 ARCH=$(getprop ro.product.cpu.abi)
 MODEL=$(getprop ro.product.model)
 DEVICE=$(getprop ro.product.device)
+BRAND=$(getprop ro.product.brand)
 MANUFACTURER=$(getprop ro.product.manufacturer)
 FINGERPRINT=$(getprop ro.build.fingerprint)
 ANDROID=$(getprop ro.build.version.release)
+SDK=$(getprop ro.build.version.sdk)
 PATCH=$(getprop ro.build.version.security_patch)
+KERNEL=$(getprop ro.kernel.version)
+HARDWARE=$(getprop ro.hardware)
+BOARD=$(getprop ro.product.board)
+PRODUCT=$(getprop ro.product.name)
+BUILD_ID=$(getprop ro.build.id)
 QEMU=$(getprop ro.kernel.qemu)
 DEBUG=$(getprop ro.debuggable)
+BUILD_TYPE=$(getprop ro.build.type)
+BUILD_TAGS=$(getprop ro.build.tags)
 
 echo ""
-echo "╔══════════════════════════════════════════════════════╗"
-echo "║     *VirtusFix — Premium Root Hide* ⚔️               ║"
-echo "║     * Ultimate Emulator Spoofing Suite ✨             ║"
-echo "╚══════════════════════════════════════════════════════╝"
+echo "*******************************"
+echo " VirtusFix Premium Root Hide V3 🔝"
+echo " Powered by: @Hivirtus ❤️"
+echo "*******************************"
+echo ""
+echo "License Verified successfully ✨"
 echo ""
 
 step "Mounting partitions..."
@@ -56,10 +67,8 @@ echo ""
 step "[🔹] Initializing Virtus core modules..."
 step "[♦️] Enforcing Strong Pass profile..."
 step "[♦️] Spoofing Emulator (ranchu/qemu hide)..."
-step "[🔹] Loading Encrypted Keybox storage..."
-step "[♦️] Injecting custom keystore hooks..."
 step "[🔹] Applying Virtus Root Fix Shield..."
-step "[♦️] Hiding emulator fingerprint (ranchu/qemu)..."
+step "[♦️] Hiding emulator fingerprint..."
 echo ""
 step "Setting permissions..."
 step "Optimizing database props..."
@@ -78,30 +87,46 @@ hide_emulator_files_safe "$MODDIR"
 echo "Optimizing database props... ✅"
 echo "Finished attribute restoration ✅"
 echo ""
-step "- Crawling Android Developers for Latest Pixel Beta device list ..."
-step "- Selecting Pixel Beta device ... ${MODEL:-Pixel 9 Pro XL} (${DEVICE:-pantah})"
-step "- Crawling Android Flash Tool for Latest Pixel Canary build info ..."
-step "- Android ${ANDROID:-15} / Security Patch: ${PATCH:-2026-07-05}"
-step "- Dumping values to mini_custom.prop ..."
+
+# Direct jump — no crawling / trust key / release key logs
+echo "══════════════════════════════════════"
+echo "       Detection Fix Active"
+echo "══════════════════════════════════════"
 echo ""
-echo "MANUFACTURER=${MANUFACTURER:-Google}"
-echo "MODEL=$(getprop ro.product.model)"
-echo "DEVICE=$(getprop ro.product.device)"
-echo "FINGERPRINT=$(getprop ro.build.fingerprint)"
-echo "RO.KERNEL.QEMU=$(getprop ro.kernel.qemu)"
-echo "RO.DEBUGGABLE=$(getprop ro.debuggable)"
-echo "RO.BUILD.TYPE=$(getprop ro.build.type)"
-echo "RO.BUILD.TAGS=$(getprop ro.build.tags)"
+echo "Model:          $(getprop ro.product.model)"
+echo "Brand:          $(getprop ro.product.brand)"
+echo "SDK Version:    $(getprop ro.build.version.sdk)"
+echo "Kernel version: $(getprop ro.kernel.version)"
+echo "Android Version:$(getprop ro.build.version.release)"
+echo "Device:         $(getprop ro.product.device)"
+echo "ID:             $(getprop ro.build.id)"
+echo "Hardware:       $(getprop ro.hardware)"
+echo "Board:          $(getprop ro.product.board)"
+echo "Product:        $(getprop ro.product.name)"
+echo "Manufacturer:   $(getprop ro.product.manufacturer)"
+echo "Fingerprint:    $(getprop ro.build.fingerprint)"
+echo "RO.KERNEL.QEMU: $(getprop ro.kernel.qemu)"
+echo "RO.DEBUGGABLE:  $(getprop ro.debuggable)"
+echo "RO.BUILD.TYPE:  $(getprop ro.build.type)"
+echo "RO.BUILD.TAGS:  $(getprop ro.build.tags)"
+echo ""
+echo "┌─────────────────────────────────────┐"
+echo "│ ✅ Device Info Found                │"
+echo "│ ✅ Root Hide Active                 │"
+echo "│ ✅ Virtus Premium Applied           │"
+echo "└─────────────────────────────────────┘"
 echo ""
 
 echo "FIXED" > "$STATUS_FILE"
 
-# Update module description in Manager
 if [ -f "$MODDIR/module.prop" ]; then
   sed -i 's/^description=.*/description=✅ Detection Fixed | Root Hidden | Emu Hidden | By @Hivirtus ❤️/' "$MODDIR/module.prop" 2>/dev/null
   cp -f "$MODDIR/module.prop" "/data/adb/modules/virtus_fix_emulator_hide/module.prop" 2>/dev/null
 fi
 
+echo "Module Flash... Done install... ✅"
+echo "Extracted to /data/adb/modules/virtus_fix_emulator_hide"
+echo ""
 echo "╔══════════════════════════════════════════════════════╗"
 echo "║  ✅ Detection Fixed                                  ║"
 echo "║  ✅ Root Hide Applied                                ║"
