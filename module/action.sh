@@ -44,8 +44,8 @@ DEBUG=$(getprop ro.debuggable)
 
 echo ""
 echo "╔══════════════════════════════════════════════════════╗"
-echo "║     *VirtusFix-Premium-Integrity-X4* ⚔️              ║"
-echo "║     * Ultimate Play Integrity & Spoofing Suite ✨     ║"
+echo "║     *VirtusFix — Premium Root Hide* ⚔️               ║"
+echo "║     * Ultimate Emulator Spoofing Suite ✨             ║"
 echo "╚══════════════════════════════════════════════════════╝"
 echo ""
 
@@ -55,18 +55,18 @@ step "- Checking device architecture... ${ARCH:-arm64-v8a} detected."
 echo ""
 step "[🔹] Initializing Virtus core modules..."
 step "[♦️] Enforcing Strong Pass profile..."
-step "[♦️] Spoofing bootloader status (Locked/Verified)..."
+step "[♦️] Spoofing Emulator (ranchu/qemu hide)..."
 step "[🔹] Loading Encrypted Keybox storage..."
 step "[♦️] Injecting custom keystore hooks..."
-step "[🔹] Applying TrigonFix root shield layer..."
+step "[🔹] Applying Virtus Root Fix Shield..."
 step "[♦️] Hiding emulator fingerprint (ranchu/qemu)..."
 echo ""
 step "Setting permissions..."
 step "Optimizing database props..."
 
 echo ""
-echo "Running Virtus integrity engine (5 sec)..."
-bar 5
+echo "Running Virtus Root Hide engine (8 sec)..."
+bar 8
 
 echo ""
 step "Applying root + emulator hide to system..."
