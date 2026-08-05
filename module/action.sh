@@ -49,7 +49,14 @@ if [ -f "$MODDIR/module.prop" ]; then
   cp -f "$MODDIR/module.prop" "/data/adb/modules/virtus_fix_emulator_hide/module.prop" 2>/dev/null
 fi
 
-echo "Done Install ✅"
+echo "╔══════════════════════════════════════════════════════╗"
+echo "║  ✅ Detection Fixed                                  ║"
+echo "║  ✅ Root Hide Applied                                ║"
+echo "║  ✅ Emulator Detection Bypassed                      ║"
+echo "╚══════════════════════════════════════════════════════╝"
+echo ""
+echo "Done! Please reboot your device to apply. ✅"
+echo "Success!"
 echo ""
 echo "Developed By @Hivirtus"
 echo ""

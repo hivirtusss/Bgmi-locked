@@ -52,6 +52,8 @@ if [ -f "$NVBASE/modules/$MODID/state/detection_status" ]; then
   cp -f "$NVBASE/modules/$MODID/state/detection_status" "$MODPATH/state/detection_status"
 fi
 
+ui_print "Extracted to $INSTALL_PATH"
+ui_print ""
 ui_print "Done Install ✅"
 ui_print ""
 ui_print "Developed By @Hivirtus"
