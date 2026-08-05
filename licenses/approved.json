@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "admin": "@Hivirtus",
+  "contact": "Telegram: @Hivirtus",
+  "users": [
+    {
+      "tg_id": "123456789",
+      "username": "@example_user",
+      "status": "approved",
+      "otp": "000000",
+      "note": "Replace with real user — delete this example after adding yourself"
+    }
+  ]
+}
