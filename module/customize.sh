@@ -1,17 +1,44 @@
 #!/system/bin/sh
 
-ui_print "╔════════════════════════════════════════╗"
-ui_print "   Virtus Fix & Emulator Hide Premium   "
-ui_print "        Developed By @Hivirtus          "
-ui_print "╚════════════════════════════════════════╝"
+# Detect root manager for "Powered by" line
+if [ "$KSU" = "true" ]; then
+  POWERED_BY="KernelSU"
+elif [ -n "$APATCH" ]; then
+  POWERED_BY="APatch"
+elif [ -n "$MAGISK_VER" ]; then
+  POWERED_BY="Magisk"
+else
+  POWERED_BY="KernelSU"
+fi
+
+# Install destination path
+INSTALL_PATH="$MODPATH"
+[ -z "$INSTALL_PATH" ] && INSTALL_PATH="$NVBASE/modules/$MODID"
+[ -z "$INSTALL_PATH" ] && INSTALL_PATH="/data/adb/modules/$MODID"
+
+ui_print "*******************************"
+ui_print " VirtusFix Premium Root Hide V3 🔝"
+ui_print " by @Hivirtus"
+ui_print " Powered by $POWERED_BY"
+ui_print "*******************************"
 ui_print ""
-ui_print "❌ Detection Fail (default)"
-ui_print "🎯 Press ACTION button to fix"
-ui_print "Root Hide + Emu Hide + UPI Bypass"
+ui_print "- Installing to $INSTALL_PATH"
+ui_print "- Extracting module files..."
 ui_print ""
-ui_print "Profiles: pixel7/7pro/8pro/9/9a/9proxl"
-ui_print "Bootloop-safe | Smooth emulator boot"
+
+TS=$(date '+%Y-%m-%d %H:%M:%S' 2>/dev/null)
+[ -z "$TS" ] && TS="boot"
+
+ui_print "$TS [VIRTUS_INIT] Start"
+ui_print "$TS [SET_TARGET] Writing profile.conf"
+ui_print "$TS [SET_EMU_HIDE] Configuring emulator bypass"
+ui_print "$TS [SET_ROOT_HIDE] Configuring root shield"
+ui_print "$TS [SET_SECURITY] release-keys / user mode"
+ui_print "$TS [SKIP_MOUNT] /system overlay disabled (safe)"
+ui_print "$TS [VIRTUS_INIT] Finish"
 ui_print ""
+ui_print "- Setting permissions..."
+ui_print "- Optimizing module props..."
 
 set_perm_recursive "$MODPATH" 0 0 0755 0644
 set_perm "$MODPATH/post-fs-data.sh" 0 0 0755
@@ -27,7 +54,6 @@ mkdir -p "$MODPATH/hide" "$MODPATH/state" "$MODPATH/icon"
 set_perm_recursive "$MODPATH/hide" 0 0 0700 0600
 set_perm_recursive "$MODPATH/icon" 0 0 0755 0644
 
-# Reset detection status on fresh install
 echo "FAIL" > "$MODPATH/state/detection_status"
 sed -i 's/^description=.*/description=❌ Detection Fail | Press Action Button 🎯 Root Hide Fix Emu By @Hivirtus ❤️/' "$MODPATH/module.prop" 2>/dev/null
 
@@ -38,3 +64,14 @@ fi
 if [ -f "$NVBASE/modules/$MODID/state/detection_status" ]; then
   cp -f "$NVBASE/modules/$MODID/state/detection_status" "$MODPATH/state/detection_status"
 fi
+
+ui_print ""
+ui_print "$TS [PERMISSIONS] Finish"
+ui_print "$TS [INSTALL] Module ready at:"
+ui_print "  $INSTALL_PATH"
+ui_print ""
+ui_print "- Done Install ✅"
+ui_print "- Reboot device to activate"
+ui_print "- Then press Action button 🎯 to fix"
+ui_print ""
+ui_print "Developed By @Hivirtus"
