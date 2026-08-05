@@ -9,10 +9,8 @@ ui_print "❌ Detection Fail (default)"
 ui_print "🎯 Press ACTION button to fix"
 ui_print "Root Hide + Emu Hide + UPI Bypass"
 ui_print ""
-ui_print "🔐 License System Enabled"
-ui_print "Users: WebUI → TG ID + OTP"
-ui_print "Admin: edit licenses/approved.json"
-ui_print "Guide: licenses/ADMIN.md"
+ui_print "Profiles: pixel7/7pro/8pro/9/9a/9proxl"
+ui_print "Bootloop-safe | Smooth emulator boot"
 ui_print ""
 
 set_perm_recursive "$MODPATH" 0 0 0755 0644
@@ -22,9 +20,7 @@ set_perm "$MODPATH/boot-completed.sh" 0 0 0755
 set_perm "$MODPATH/action.sh" 0 0 0755
 set_perm "$MODPATH/common/apply.sh" 0 0 0755
 set_perm "$MODPATH/common/safe_boot.sh" 0 0 0755
-set_perm "$MODPATH/common/verify_license.sh" 0 0 0755
-set_perm "$MODPATH/license.conf" 0 0 0644
-set_perm_recursive "$MODPATH/webui" 0 0 0755 0644
+set_perm "$MODPATH/profile.conf" 0 0 0644
 
 touch "$MODPATH/skip_mount"
 mkdir -p "$MODPATH/hide" "$MODPATH/state" "$MODPATH/icon"
