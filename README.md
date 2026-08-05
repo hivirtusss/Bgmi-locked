@@ -1,49 +1,61 @@
-# Virtus Fix & Emulator Hide (KernelSU Premium)
+# Virtus Fix & Emulator Hide — Licensed
 
 **Developed By @Hivirtus**
-
-Universal root + emulator hide for all UPI apps with premium Action button UI.
 
 ## Download
 
 `dist/VirtusFix-EmulatorHide-KernelSU.zip`
 
-## How Action Button works
+## License flow
 
-| State | What you see |
-|-------|----------------|
-| **Before Action tap** | ❌ Detection Fail in module description |
-| **Tap Action 🎯** | Realistic Virtus/TrigonFix fix logs + 5 sec timer |
-| **After complete** | ✅ Detection Fixed + device info + Developed By @Hivirtus |
+| Step | User | Admin (@Hivirtus) |
+|------|------|-------------------|
+| 1 | Get TG ID from @userinfobot | — |
+| 2 | Message @Hivirtus | Receive request |
+| 3 | Get OTP | Add user to `licenses/approved.json` |
+| 4 | WebUI → enter ID + OTP | Push to GitHub |
+| 5 | Reboot → Action 🎯 | — |
 
-## Install
+## User verify
 
-1. Flash zip in KernelSU Manager
-2. Reboot
-3. Open module → tap **Action** button
-4. Wait for fix to complete → reboot again
+1. KernelSU → Virtus Fix → **WebUI**
+2. Enter Telegram ID + OTP
+3. **Save & Verify**
+4. Reboot → tap **Action**
 
-## Module description
-
+Or edit manually:
 ```
-Press Action Button 🎯
-Root Hide Fix Emu By @Hivirtus ❤️
+/data/adb/modules/virtus_fix_emulator_hide/license.conf
 ```
 
-## Features
+## Admin approve (YOU)
 
-- FreeRecharge logic + universal UPI root hide
-- Multi Pixel profiles (7, 7 Pro, 8 Pro, 9, 9a, 9 Pro XL)
-- Bootloop-safe (no /system bind mounts)
-- Premium Action UI like TrigonFix screenshot
+See **`licenses/ADMIN.md`** — full guide.
 
-## Profile change
+Quick: edit `licenses/approved.json`:
 
-Edit `/data/adb/modules/virtus_fix_emulator_hide/profile.conf`
-
+```json
+{
+  "tg_id": "USER_ID",
+  "username": "@name",
+  "status": "approved",
+  "otp": "482910"
+}
 ```
-profile=pixel9
+
+Push to GitHub → user verifies.
+
+Generate OTP:
+```bash
+chmod +x tools/generate_otp.sh
+./tools/generate_otp.sh
 ```
+
+## Without license
+
+- Module shows **❌ Detection Fail**
+- Root/emulator hide **won't apply**
+- Action button asks for license
 
 ## Build
 

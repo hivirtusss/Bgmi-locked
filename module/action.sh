@@ -5,9 +5,29 @@ MODDIR=${0%/*}
 set +e
 . "$MODDIR/common/safe_boot.sh"
 . "$MODDIR/common/apply.sh"
+. "$MODDIR/common/license.sh"
 
 STATUS_FILE="$MODDIR/state/detection_status"
 mkdir -p "$MODDIR/state"
+
+if ! is_licensed "$MODDIR"; then
+  echo ""
+  echo "╔══════════════════════════════════════════════════════╗"
+  echo "║  ❌ Detection Fail — LICENSE REQUIRED                ║"
+  echo "╚══════════════════════════════════════════════════════╝"
+  echo ""
+  echo "🔐 Open module WebUI → enter TG ID + OTP"
+  echo "📩 Contact @Hivirtus on Telegram for approval"
+  echo ""
+  echo "Manual: edit license.conf"
+  echo "  /data/adb/modules/virtus_fix_emulator_hide/license.conf"
+  echo ""
+  echo "  tg_id=YOUR_TELEGRAM_ID"
+  echo "  otp=CODE_FROM_HIVIRTUS"
+  echo ""
+  echo "Developed By @Hivirtus"
+  exit 1
+fi
 
 pause() { sleep "$1"; }
 
