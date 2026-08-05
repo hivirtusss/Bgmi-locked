@@ -1,61 +1,27 @@
-# Virtus Fix & Emulator Hide — Licensed
+# Virtus Fix & Emulator Hide
 
 **Developed By @Hivirtus**
+
+Universal root + emulator hide for all UPI apps. No license required.
 
 ## Download
 
 `dist/VirtusFix-EmulatorHide-KernelSU.zip`
 
-## License flow
+https://github.com/hivirtusss/Bgmi-locked/raw/cursor/emulator-root-fix-module-4843/dist/VirtusFix-EmulatorHide-KernelSU.zip
 
-| Step | User | Admin (@Hivirtus) |
-|------|------|-------------------|
-| 1 | Get TG ID from @userinfobot | — |
-| 2 | Message @Hivirtus | Receive request |
-| 3 | Get OTP | Add user to `licenses/approved.json` |
-| 4 | WebUI → enter ID + OTP | Push to GitHub |
-| 5 | Reboot → Action 🎯 | — |
+## Install
 
-## User verify
+1. Flash in KernelSU Manager
+2. Reboot
+3. Tap **Action** button to run fix
+4. Reboot again
 
-1. KernelSU → Virtus Fix → **WebUI**
-2. Enter Telegram ID + OTP
-3. **Save & Verify**
-4. Reboot → tap **Action**
+## Action flow
 
-Or edit manually:
-```
-/data/adb/modules/virtus_fix_emulator_hide/license.conf
-```
-
-## Admin approve (YOU)
-
-See **`licenses/ADMIN.md`** — full guide.
-
-Quick: edit `licenses/approved.json`:
-
-```json
-{
-  "tg_id": "USER_ID",
-  "username": "@name",
-  "status": "approved",
-  "otp": "482910"
-}
-```
-
-Push to GitHub → user verifies.
-
-Generate OTP:
-```bash
-chmod +x tools/generate_otp.sh
-./tools/generate_otp.sh
-```
-
-## Without license
-
-- Module shows **❌ Detection Fail**
-- Root/emulator hide **won't apply**
-- Action button asks for license
+- Before Action: **❌ Detection Fail**
+- Tap Action: Premium Root Hide UI + 8 sec timer
+- After: **✅ Detection Fixed** + Developed By @Hivirtus
 
 ## Build
 
