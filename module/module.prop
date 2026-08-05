@@ -1,6 +1,8 @@
-id=universal_root_hide
-name=Universal Root & Emulator Hide
-version=v3.1.0-safe
-versionCode=310
-author=Bgmi-locked
-description=Bootloop-safe universal hide for ALL UPI apps. FreeRecharge logic + multi Pixel profiles. No /system bind mounts. Smooth emulator boot. BharatPe Paytm PhonePe FreeCharge YesPay LXME IND.
+id=virtus_fix_emulator_hide
+name=Virtus Fix & Emulator Hide
+version=v4.0.0-premium
+versionCode=400
+author=@Hivirtus
+description=❌ Detection Fail | Press Action Button 🎯 Root Hide Fix Emu By @Hivirtus ❤️
+actionIcon=icon/action.png
+webuiIcon=icon/action.png
