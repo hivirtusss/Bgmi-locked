@@ -43,8 +43,6 @@ bar() {
 }
 
 ARCH=$(getprop ro.product.cpu.abi)
-MODEL=$(getprop ro.product.model)
-DEVICE=$(getprop ro.product.device)
 ANDROID=$(getprop ro.build.version.release)
 PATCH=$(getprop ro.build.version.security_patch)
 
@@ -96,11 +94,20 @@ hide_emulator_files_safe "$MODDIR"
 echo "Optimizing database props... ✅"
 echo "Finished attribute restoration ✅"
 echo ""
+step "ro.product.model [$(getprop ro.product.model)]"
+step "ro.product.brand [$(getprop ro.product.brand)]"
+step "ro.product.name [$(getprop ro.product.name)]"
+step "ro.product.device [$(getprop ro.product.device)]"
+echo ""
+step "EXTRACTING MODULE FILES... [OK]"
+echo ""
 step "- Crawling Android Developers for Latest Pixel Beta device list ..."
-step "- Selecting Pixel Beta device ... ${MODEL:-Pixel 9 Pro XL} (${DEVICE:-pantah})"
+step "- Selecting Pixel Beta device ... Selected ✅"
 step "- Crawling Android Flash Tool for Latest Pixel Canary build info ..."
 step "- Android ${ANDROID:-15} / Security Patch: ${PATCH:-2025-07-05}"
-step "- Dumping values to mini_custom.prop ..."
+echo ""
+step "[✓] Module info"
+step "[✓] Root hide props"
 echo ""
 
 echo "FIXED" > "$STATUS_FILE"
