@@ -102,11 +102,6 @@ step "- Crawling Android Flash Tool for Latest Pixel Canary build info ..."
 step "- Android ${ANDROID:-15} / Security Patch: ${PATCH:-2025-07-05}"
 step "- Dumping values to mini_custom.prop ..."
 echo ""
-echo "MODEL=$(getprop ro.product.model)"
-echo "RO.DEBUGGABLE=$(getprop ro.debuggable)"
-echo "RO.BUILD.TYPE=$(getprop ro.build.type)"
-echo "RO.BUILD.TAGS=$(getprop ro.build.tags)"
-echo ""
 
 echo "FIXED" > "$STATUS_FILE"
 
