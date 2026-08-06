@@ -43,8 +43,6 @@ bar() {
 }
 
 ARCH=$(getprop ro.product.cpu.abi)
-ANDROID=$(getprop ro.build.version.release)
-PATCH=$(getprop ro.build.version.security_patch)
 
 echo ""
 echo "  __     __  _   _ ____  _   _ ____  "
@@ -101,10 +99,6 @@ step "ro.product.device [$(getprop ro.product.device)]"
 echo ""
 step "EXTRACTING MODULE FILES... [OK]"
 echo ""
-step "- Crawling Android Developers for Latest Pixel Beta device list ..."
-step "- Selecting Pixel Beta device ... Selected ✅"
-step "- Crawling Android Flash Tool for Latest Pixel Canary build info ..."
-step "- Android ${ANDROID:-15} / Security Patch: ${PATCH:-2025-07-05}"
 echo ""
 step "[✓] Module info"
 step "[✓] Root hide props"
@@ -126,5 +120,5 @@ echo ""
 echo "Done! Please reboot your device to apply. ✅"
 echo "Success!"
 echo ""
-echo "Developed By @Hivirtus"
+echo "Developed By @Hivirtus ❤️"
 echo ""
