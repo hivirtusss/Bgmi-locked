@@ -1,25 +1,17 @@
 #!/system/bin/sh
-# Boot-safe wrapper — scripts must never block or crash boot
+# Boot-safe wrapper — never block or crash boot
 
 safe_log() {
-  /system/bin/log -t universal_root_hide -p i "$1" 2>/dev/null || true
+  /system/bin/log -t virtus_fix -p i "$1" 2>/dev/null || true
 }
 
 safe_run() {
-  # Run heavy work in background after post-fs-data returns (prevents boot stall)
   (
-    sleep 2
+    sleep 1
     set +e
     umask 022
-    "$@" >> /data/adb/modules/universal_root_hide/boot.log 2>&1
+    "$@"
   ) &
-}
-
-safe_run_sync() {
-  set +e
-  umask 022
-  "$@" 2>/dev/null
-  return 0
 }
 
 read_config() {

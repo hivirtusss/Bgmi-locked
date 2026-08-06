@@ -7,11 +7,14 @@ set +e
 
 read_config "$MODDIR/profile.conf"
 
-sleep 5
+# Short settle — long sleep was freezing emulators
+sleep 1
+
 apply_all_props "$MODDIR"
 
-if [ "$URH_FILE_HIDE" = "1" ]; then
+if [ "$URH_FILE_HIDE" = "1" ] && [ ! -f "$MODDIR/state/hide_applied" ]; then
   hide_emulator_files_safe "$MODDIR"
+  echo "1" > "$MODDIR/state/hide_applied"
 fi
 
 safe_log "service OK"

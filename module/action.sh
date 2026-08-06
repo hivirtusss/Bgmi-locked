@@ -19,7 +19,7 @@ else
   POWERED_BY="KernelSU"
 fi
 
-pause() { sleep 0.35; }
+pause() { sleep 0.15; }
 
 step() {
   echo "$1"
@@ -27,7 +27,7 @@ step() {
 }
 
 bar() {
-  sec=8
+  sec=4
   i=1
   while [ "$i" -le "$sec" ]; do
     printf "Processing"
@@ -76,7 +76,7 @@ step "Setting permissions..."
 step "Optimizing database props..."
 
 echo ""
-echo "Running Virtus Root Hide engine (8 sec)..."
+echo "Running Virtus Root Hide engine (4 sec)..."
 bar
 
 echo ""
@@ -84,7 +84,7 @@ step "Applying root + emulator hide to system..."
 
 read_config "$MODDIR/profile.conf"
 PROFILE=$(load_selected_profile "$MODDIR" 2>/dev/null | tail -n1)
-echo "${PROFILE:-pixel9proxl}"
+echo "${PROFILE:-pixel6a}"
 
 apply_all_props "$MODDIR"
 hide_emulator_files_safe "$MODDIR"

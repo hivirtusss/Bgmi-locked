@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Shared apply logic — bootloop-safe (FreeRecharge props + universal UPI hide)
+# VirtusFix — deep root + emulator hide (all Pixel profiles, bootloop-safe)
 
 if [ -x /data/adb/ksu/bin/resetprop ]; then
   RESETPROP=/data/adb/ksu/bin/resetprop
@@ -17,22 +17,110 @@ delete_prop() {
   $RESETPROP --delete "$1" 2>/dev/null || true
 }
 
-# Exact FreeRecharge reference logic — props only, proven safe on emulators
+set_product_partition() {
+  prefix="$1"
+  codename="$2"
+  model="$3"
+  reset_ro "${prefix}.device" "$codename"
+  reset_ro "${prefix}.name" "$codename"
+  reset_ro "${prefix}.brand" "google"
+  reset_ro "${prefix}.manufacturer" "Google"
+  reset_ro "${prefix}.model" "$model"
+}
+
+apply_device_profile() {
+  codename="$1"
+  model="$2"
+  fingerprint="$3"
+  hardware="$4"
+  platform="$5"
+
+  for prefix in \
+    ro.product \
+    ro.product.system \
+    ro.product.vendor \
+    ro.product.odm \
+    ro.product.system_ext \
+    ro.product.product \
+    ro.product.vendor_dlkm \
+    ro.product.odm_dlkm; do
+    set_product_partition "$prefix" "$codename" "$model"
+  done
+
+  reset_ro ro.build.product "$codename"
+  reset_ro ro.product.board "$codename"
+  reset_ro ro.product.hardware "$hardware"
+  reset_ro ro.hardware "$hardware"
+  reset_ro ro.boot.hardware "$hardware"
+  reset_ro ro.board.platform "$platform"
+  reset_ro ro.soc.model "$platform"
+  reset_ro ro.bootloader "$hardware"-1.2-${platform}-9816218
+
+  for fp in \
+    ro.build.fingerprint \
+    ro.bootimage.build.fingerprint \
+    ro.vendor.build.fingerprint \
+    ro.system.build.fingerprint \
+    ro.odm.build.fingerprint \
+    ro.system_ext.build.fingerprint \
+    ro.vendor_dlkm.build.fingerprint \
+    ro.odm_dlkm.build.fingerprint; do
+    reset_ro "$fp" "$fingerprint"
+  done
+
+  reset_ro ro.build.flavor "${codename}-user"
+  reset_ro ro.build.user android-build
+  reset_ro ro.build.host android-build
+}
+
 apply_freecharge_core() {
   reset_ro ro.kernel.qemu 0
   reset_ro ro.boot.qemu 0
+  reset_ro ro.kernel.qemu.gles 0
+  reset_ro ro.kernel.qemu.dalvik 0
   reset_ro qemu.hw.mainkeys 0
   reset_ro init.svc.qemud stopped
-  reset_ro ro.kernel.android.qemud null
   reset_ro ro.build.characteristics nosdcard
   reset_ro ro.boot.mode normal
-  reset_ro ro.hardware pixel
-  reset_ro ro.boot.hardware pixel
+  reset_ro ro.bootmode unknown
   reset_ro ro.build.tags release-keys
   reset_ro ro.build.type user
 }
 
-# Extra UPI/root props — all failures ignored, never abort boot
+apply_emulator_deep_hide() {
+  hardware="${1:-bluejay}"
+
+  delete_prop ro.boot.qemu.avd_name
+  delete_prop ro.boot.qemu.settings.android.avd_name
+  delete_prop ro.boot.qemu.virt_model
+  delete_prop ro.boot.qemu.camera_protocol_ver
+  delete_prop ro.boot.qemu.adb.pubkey
+  delete_prop ro.kernel.android.qemud
+  delete_prop init.svc.qemu-props
+  delete_prop init.svc.goldfish-logcat
+  delete_prop init.svc.goldfish-setup
+
+  reset_ro ro.kernel.qemu 0
+  reset_ro ro.boot.qemu 0
+  reset_ro ro.product.cpu.abilist "arm64-v8a,armeabi-v7a,armeabi"
+  reset_ro ro.product.cpu.abilist64 "arm64-v8a"
+  reset_ro ro.product.cpu.abilist32 "armeabi-v7a,armeabi"
+  reset_ro ro.hardware.egl mali
+  reset_ro ro.hardware.vulkan mali
+  reset_ro ro.setupwizard.mode DISABLED
+  reset_ro ro.boot.selinux enforcing
+  reset_ro ro.crypto.state encrypted
+
+  reset_ro gsm.sim.state READY
+  reset_ro gsm.operator.alpha "Jio 4G"
+  reset_ro gsm.operator.numeric "405864"
+  reset_ro gsm.sim.operator.alpha "Jio"
+  reset_ro gsm.sim.operator.numeric "405864"
+  reset_ro gsm.current.phone-type 1
+
+  reset_ro ro.product.hardware "$hardware"
+}
+
 apply_universal_upi_hide() {
   reset_ro ro.debuggable 0
   reset_ro ro.secure 1
@@ -50,37 +138,11 @@ apply_universal_upi_hide() {
   reset_ro ro.crypto.state encrypted
   reset_ro ro.magisk.version ""
   reset_ro ro.magisk.versioncode 0
-
-  # Native bridge — optional, can cause issues on some x86 setups; skip if fails
   reset_ro ro.dalvik.vm.native.bridge 0
   reset_ro ro.enable.native.bridge.exec 0
   reset_ro persist.sys.nativebridge 0
 
-  delete_prop ro.boot.qemu.avd_name
-  delete_prop init.svc.qemu-props
-  delete_prop init.svc.goldfish-logcat
-  delete_prop init.svc.goldfish-setup
-}
-
-apply_device_profile() {
-  codename="$1"
-  model="$2"
-  fingerprint="$3"
-
-  reset_ro ro.product.device "$codename"
-  reset_ro ro.vendor.product.device "$codename"
-  reset_ro ro.product.name "$codename"
-  reset_ro ro.product.model "$model"
-  reset_ro ro.product.brand google
-  reset_ro ro.product.manufacturer Google
-  reset_ro ro.build.product "$codename"
-  reset_ro ro.product.board "$codename"
-  reset_ro ro.build.fingerprint "$fingerprint"
-  reset_ro ro.bootimage.build.fingerprint "$fingerprint"
-  reset_ro ro.vendor.build.fingerprint "$fingerprint"
-  reset_ro ro.system.build.fingerprint "$fingerprint"
-  reset_ro ro.odm.build.fingerprint "$fingerprint"
-  reset_ro ro.build.flavor "${codename}-user"
+  delete_prop ro.kernel.su
 }
 
 load_selected_profile() {
@@ -94,44 +156,82 @@ load_selected_profile() {
     profile=$(grep -E '^profile=' "$conf" 2>/dev/null | head -n1 | cut -d= -f2 | tr -d ' "\r')
   fi
 
-  [ -z "$profile" ] && profile=pixel9proxl
+  [ -z "$profile" ] && profile=pixel6a
 
   case "$profile" in
+    pixel6a|bluejay)
+      apply_device_profile bluejay "Pixel 6a" \
+        "google/bluejay/bluejay:14/AP2A.240805.005/12345678:user/release-keys" \
+        bluejay gs101
+      apply_emulator_deep_hide bluejay
+      echo "pixel6a"
+      ;;
+    pixel6|oriole)
+      apply_device_profile oriole "Pixel 6" \
+        "google/oriole/oriole:14/AP2A.240805.005/12345678:user/release-keys" \
+        oriole gs101
+      apply_emulator_deep_hide oriole
+      echo "pixel6"
+      ;;
     pixel7|panther)
       apply_device_profile panther "Pixel 7" \
-        "google/panther/panther:14/AP2A.240805.005/12025142:user/release-keys"
+        "google/panther/panther:14/AP2A.240805.005/12025142:user/release-keys" \
+        panther gs201
+      apply_emulator_deep_hide panther
       echo "pixel7"
       ;;
     pixel7pro|cheetah)
       apply_device_profile cheetah "Pixel 7 Pro" \
-        "google/cheetah/cheetah:14/AP2A.240805.005/12025142:user/release-keys"
+        "google/cheetah/cheetah:14/AP2A.240805.005/12025142:user/release-keys" \
+        cheetah gs201
+      apply_emulator_deep_hide cheetah
       echo "pixel7pro"
+      ;;
+    pixel8|shiba)
+      apply_device_profile shiba "Pixel 8" \
+        "google/shiba/shiba:14/AP2A.240905.003/12345678:user/release-keys" \
+        shiba zuma
+      apply_emulator_deep_hide shiba
+      echo "pixel8"
       ;;
     pixel8pro|husky)
       apply_device_profile husky "Pixel 8 Pro" \
-        "google/husky/husky:14/AP2A.240905.003/12345678:user/release-keys"
+        "google/husky/husky:14/AP2A.240905.003/12345678:user/release-keys" \
+        husky zuma
+      apply_emulator_deep_hide husky
       echo "pixel8pro"
       ;;
     pixel9|tokay)
       apply_device_profile tokay "Pixel 9" \
-        "google/tokay/tokay:15/AP3A.241005.015/1234567:user/release-keys"
+        "google/tokay/tokay:15/AP3A.241005.015/1234567:user/release-keys" \
+        tokay zuma
+      apply_emulator_deep_hide tokay
       echo "pixel9"
       ;;
     pixel9a|akita)
       apply_device_profile akita "Pixel 9a" \
-        "google/akita/akita:15/AP3A.241005.015/1234567:user/release-keys"
+        "google/akita/akita:15/AP3A.241005.015/1234567:user/release-keys" \
+        akita zuma
+      apply_emulator_deep_hide akita
       echo "pixel9a"
       ;;
-    pixel9proxl|pantah|*)
+    pixel9proxl|pantah)
       apply_device_profile pantah "Pixel 9 Pro XL" \
-        "google/pantah/pantah:15/AP3A.241005.015/1234567:user/release-keys"
+        "google/pantah/pantah:15/AP3A.241005.015/1234567:user/release-keys" \
+        pantah zuma
+      apply_emulator_deep_hide pantah
       echo "pixel9proxl"
+      ;;
+    *)
+      apply_device_profile bluejay "Pixel 6a" \
+        "google/bluejay/bluejay:14/AP2A.240805.005/12345678:user/release-keys" \
+        bluejay gs101
+      apply_emulator_deep_hide bluejay
+      echo "pixel6a"
       ;;
   esac
 }
 
-# SAFE file hide — NEVER touch /system or /vendor (bootloop risk on emulators)
-# Only emulator-specific dev/socket paths (same as safe industry practice)
 bind_hide_file_safe() {
   moddir="$1"
   target="$2"
@@ -143,11 +243,12 @@ bind_hide_file_safe() {
       ;;
   esac
 
+  mount | grep -Fq " $target " && return 0
+
   hide="$moddir/hide/$(echo "$target" | tr '/' '_')"
   mkdir -p "$(dirname "$hide")" 2>/dev/null || return 0
   : > "$hide" 2>/dev/null || return 0
   chmod 000 "$hide" 2>/dev/null || true
-  mount | grep -Fq " $target " && return 0
   mount -o bind "$hide" "$target" 2>/dev/null || true
 }
 
@@ -157,14 +258,15 @@ hide_emulator_files_safe() {
     /dev/qemu_pipe \
     /dev/goldfish_pipe \
     /dev/goldfish_sync \
+    /dev/goldfish_address_space \
     /dev/socket/qemud \
     /dev/socket/genyd \
     /dev/socket/baseband_genyd \
-    /sys/qemu_trace; do
+    /sys/qemu_trace \
+    /sys/devices/virtual/misc/qemu_pipe; do
     bind_hide_file_safe "$moddir" "$path"
   done
 
-  # Non-system su symlinks only — never bind /system/bin/su
   for path in /su /sbin/su /cache/su /data/local/su /data/local/bin/su /data/local/xbin/su; do
     bind_hide_file_safe "$moddir" "$path"
   done
