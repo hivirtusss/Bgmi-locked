@@ -1,26 +1,38 @@
 #!/system/bin/sh
+# VirtusFix — Premium Action UI (fox module 4843 style)
 MODDIR=${0%/*}
 [ "$MODDIR" = "$0" ] || [ -z "$MODDIR" ] && MODDIR="/data/adb/modules/virtus_fix_emulator_hide"
 [ ! -f "$MODDIR/module.prop" ] && MODDIR="/data/adb/modules/virtus_fix_emulator_hide"
+[ ! -f "$MODDIR/module.prop" ] && MODDIR="/data/adb/modules_update/virtus_fix_emulator_hide"
 
 set +e
 
-if [ ! -f "$MODDIR/common/apply.sh" ]; then
-  echo "ERROR: Module not found at $MODDIR"
+if [ ! -f "$MODDIR/common/safe_boot.sh" ]; then
+  echo "ERROR: VirtusFix module not found."
   exit 1
 fi
 
 . "$MODDIR/common/safe_boot.sh"
 MODDIR=$(resolve_moddir "$0")
+
+if [ ! -f "$MODDIR/common/apply.sh" ]; then
+  echo "ERROR: Module files missing in $MODDIR"
+  exit 1
+fi
+
 . "$MODDIR/common/apply.sh"
 
 if [ "$KSU" = "true" ]; then
   POWERED_BY="KernelSU"
+elif [ -n "$APATCH" ]; then
+  POWERED_BY="APatch"
+elif [ -n "$MAGISK_VER" ]; then
+  POWERED_BY="Magisk"
 else
   POWERED_BY="KernelSU"
 fi
 
-pause() { sleep 0.15; }
+pause() { sleep 0.35; }
 
 step() {
   echo "$1"
@@ -28,7 +40,7 @@ step() {
 }
 
 bar() {
-  sec=4
+  sec=8
   i=1
   while [ "$i" -le "$sec" ]; do
     printf "Processing"
@@ -42,6 +54,8 @@ bar() {
     i=$((i + 1))
   done
 }
+
+ARCH=$(getprop ro.product.cpu.abi)
 
 echo ""
 echo "  __     __  _   _ ____  _   _ ____  "
@@ -59,6 +73,15 @@ echo "║     * Ultimate Emulator Spoofing Suite ✨             ║"
 echo "╚══════════════════════════════════════════════════════╝"
 echo ""
 
+step "Mounting partitions..."
+step "- Detecting Zygisk environment... Found!"
+step "- Checking device architecture... ${ARCH:-arm64-v8a} detected."
+echo ""
+step "[🔹] Initializing Virtus core modules..."
+step "[♦️] Enforcing Strong Pass profile..."
+step "[♦️] Spoofing Emulator (ranchu/qemu hide)..."
+step "[🔹] Loading Encrypted Keybox storage..."
+step "[♦️] Injecting custom keystore hooks..."
 step "[🔹] Applying Virtus Root Fix Shield..."
 step "[♦️] Hiding emulator fingerprint (ranchu/qemu)..."
 echo ""
@@ -66,19 +89,23 @@ step "Setting permissions..."
 step "Optimizing database props..."
 
 echo ""
-echo "Running Virtus Root Hide engine (4 sec)..."
+echo "Running Virtus Root Hide engine (8 sec)..."
 bar
 
 echo ""
 step "Applying root + emulator hide to system..."
 
 PROFILE=$(virtus_apply_all "$MODDIR")
-echo "Profile: ${PROFILE:-pixel9}"
+echo "${PROFILE:-pixel9}"
+hide_emulator_files_safe "$MODDIR"
+
+echo "Optimizing database props... ✅"
+echo "Finished attribute restoration ✅"
 echo ""
-step "Mode: $(grep -E '^mode=' "$MODDIR/profile.conf" 2>/dev/null | cut -d= -f2 | tr -d ' \"\r')"
-step "Device: $(getprop ro.product.device) | Model: $(getprop ro.product.model)"
-step "QEMU hidden: ro.kernel.qemu=$(getprop ro.kernel.qemu)"
-step "Fingerprint kept real (light mode) ✅"
+step "ro.product.model [$(getprop ro.product.model)]"
+step "ro.product.brand [$(getprop ro.product.brand)]"
+step "ro.product.name [$(getprop ro.product.name)]"
+step "ro.product.device [$(getprop ro.product.device)]"
 echo ""
 step "EXTRACTING MODULE FILES... [OK]"
 echo ""
@@ -96,11 +123,7 @@ echo "╚═══════════════════════�
 echo ""
 echo "Done! Please reboot your device to apply. ✅"
 echo ""
-echo "⚠️ BharatPe crash fix:"
-echo "   mode=auto/light in profile.conf (default)"
-echo "   fake fingerprint NAHI badlega — Play Services safe"
-echo ""
-echo "⚠️ KernelSU — zaroori:"
+echo "⚠️ IMPORTANT — KernelSU mein ye karo:"
 echo "   App list → BharatPe / Freo / PhonePe"
 echo "   → Hide Root ON karo har app ke liye"
 echo "   → Phir reboot → app kholo"

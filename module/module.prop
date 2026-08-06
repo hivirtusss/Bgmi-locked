@@ -1,7 +1,7 @@
 id=virtus_fix_emulator_hide
 name=VirtusFix Premium Root Hide V3
-version=v7.1.0-bharatpe
-versionCode=710
+version=v7.1.1-ui-restore
+versionCode=711
 author=@Hivirtus
 description=❌ Tap Action 🎯 then Hide Root in KernelSU @Hivirtus ❤️
 action=action.sh
