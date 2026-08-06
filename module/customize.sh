@@ -14,6 +14,22 @@ INSTALL_PATH="$MODPATH"
 [ -z "$INSTALL_PATH" ] && INSTALL_PATH="$NVBASE/modules/$MODID"
 [ -z "$INSTALL_PATH" ] && INSTALL_PATH="/data/adb/modules/$MODID"
 
+module_size_kb() {
+  bytes=0
+  if [ -n "$ZIPPATH" ] && [ -f "$ZIPPATH" ]; then
+    bytes=$(wc -c < "$ZIPPATH" 2>/dev/null | tr -d ' ')
+  fi
+  [ -z "$bytes" ] && bytes=0
+  awk "BEGIN {printf \"%.2f\", $bytes/1024}"
+}
+
+SIZE_KB=$(module_size_kb)
+
+ui_print "- Module size: ${SIZE_KB} kB"
+ui_print "- Installing to $INSTALL_PATH"
+ui_print "- Running module installer"
+ui_print ""
+
 ui_print "*******************************"
 ui_print " VirtusFix Premium Root Hide V3 🔝"
 ui_print " by @Hivirtus"
@@ -56,8 +72,6 @@ if [ -f "$NVBASE/modules/$MODID/state/detection_status" ]; then
   cp -f "$NVBASE/modules/$MODID/state/detection_status" "$MODPATH/state/detection_status"
 fi
 
-ui_print "Extracted to $INSTALL_PATH"
-ui_print ""
 ui_print "Done Install ✅"
 ui_print ""
 ui_print "Developed By @Hivirtus"
