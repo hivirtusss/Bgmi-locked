@@ -1,9 +1,19 @@
-# Minimal early props — safe subset only (FreeRecharge did not use system.prop)
-# Full props applied via post-fs-data.sh resetprop (safer on emulators)
+# Early boot emulator kill — full props in post-fs-data via resetprop
 
 ro.kernel.qemu=0
 ro.boot.qemu=0
+ro.kernel.qemu.gles=0
+ro.kernel.qemu.dalvik=0
+ro.hardware=bluejay
+ro.boot.hardware=bluejay
+ro.product.device=bluejay
+ro.product.model=Pixel 6a
+ro.product.manufacturer=Google
+ro.product.brand=google
+ro.product.name=bluejay
+ro.build.characteristics=nosdcard
 ro.build.type=user
 ro.build.tags=release-keys
 ro.debuggable=0
 ro.secure=1
+ro.test_harness=0
