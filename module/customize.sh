@@ -62,7 +62,7 @@ set_perm_recursive "$MODPATH/hide" 0 0 0700 0600
 set_perm_recursive "$MODPATH/icon" 0 0 0755 0644
 
 echo "FAIL" > "$MODPATH/state/detection_status"
-  sed -i 's/^description=.*/description=❌ Detection Fail | v4 ALL Apps Phone Disguise No Crash | Action 🎯 @Hivirtus ❤️/' "$MODPATH/module.prop" 2>/dev/null
+  sed -i 's/^description=.*/description=❌ Detection Fail | Boot-Safe | Tap Action 🎯 @Hivirtus ❤️/' "$MODPATH/module.prop" 2>/dev/null
 
 if [ -f "$NVBASE/modules/$MODID/profile.conf" ]; then
   cp -f "$NVBASE/modules/$MODID/profile.conf" "$MODPATH/profile.conf"

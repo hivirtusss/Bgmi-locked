@@ -3,24 +3,17 @@ MODDIR=${0%/*}
 
 set +e
 . "$MODDIR/common/safe_boot.sh"
-. "$MODDIR/common/universal_banking.sh"
-. "$MODDIR/common/apply.sh"
 
 read_config "$MODDIR/profile.conf"
 
-sleep 1
-apply_all_props "$MODDIR"
-
-if [ "$URH_FILE_HIDE" = "1" ] && [ ! -f "$MODDIR/state/hide_applied" ]; then
-  hide_emulator_files_safe "$MODDIR"
-  echo "1" > "$MODDIR/state/hide_applied"
-fi
-
-# Re-apply props after boot settles — fixes ranchu/sdk_gphone leaks
+# Wait until system fully up — never block early boot
 (
-  sleep 6
-  apply_all_props "$MODDIR"
-  safe_log "service re-apply OK"
+  sleep 25
+  . "$MODDIR/common/universal_banking.sh"
+  . "$MODDIR/common/apply.sh"
+  read_config "$MODDIR/profile.conf"
+  apply_boot_safe "$MODDIR"
+  safe_log "service boot-safe apply OK"
 ) &
 
-safe_log "service OK"
+safe_log "service deferred (boot-safe)"

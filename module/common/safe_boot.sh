@@ -32,9 +32,10 @@ safe_log() {
   /system/bin/log -t virtus_fix -p i "$1" 2>/dev/null || true
 }
 
+# Defer heavy work — post-fs-data must return instantly (prevents emulator bootloop)
 safe_run() {
   (
-    sleep 1
+    sleep 12
     set +e
     umask 022
     "$@"
@@ -44,7 +45,7 @@ safe_run() {
 read_config() {
   conf="$1"
   profile=""
-  file_hide=1
+  file_hide=0
   late_only=1
 
   [ -f "$conf" ] || return 0
@@ -53,7 +54,7 @@ read_config() {
   fh=$(grep -E '^file_hide=' "$conf" 2>/dev/null | head -n1 | cut -d= -f2 | tr -d ' "\r')
   lo=$(grep -E '^late_file_hide=' "$conf" 2>/dev/null | head -n1 | cut -d= -f2 | tr -d ' "\r')
 
-  [ "$fh" = "0" ] && file_hide=0
+  [ "$fh" = "1" ] && file_hide=1
   [ "$lo" = "0" ] && late_only=0
 
   export URH_PROFILE="$profile"

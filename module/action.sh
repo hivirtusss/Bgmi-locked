@@ -104,7 +104,11 @@ PROFILE=$(load_selected_profile "$MODDIR" 2>/dev/null | tail -n1)
 echo "${PROFILE:-pixel6a}"
 
 apply_all_props "$MODDIR"
-hide_emulator_files_safe "$MODDIR"
+
+read_config "$MODDIR/profile.conf"
+if [ "$URH_FILE_HIDE" = "1" ]; then
+  hide_emulator_files_safe "$MODDIR"
+fi
 
 echo "Optimizing database props... ✅"
 echo "Finished attribute restoration ✅"

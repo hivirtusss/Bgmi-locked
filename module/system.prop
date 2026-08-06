@@ -1,19 +1,7 @@
-# Early boot emulator kill — full props in post-fs-data via resetprop
+# MINIMAL early props only — heavy spoof via resetprop AFTER boot (bootloop-safe)
+# Do NOT set ro.hardware/product here on emulators
 
 ro.kernel.qemu=0
 ro.boot.qemu=0
-ro.kernel.qemu.gles=0
-ro.kernel.qemu.dalvik=0
-ro.hardware=bluejay
-ro.boot.hardware=bluejay
-ro.product.device=bluejay
-ro.product.model=Pixel 6a
-ro.product.manufacturer=Google
-ro.product.brand=google
-ro.product.name=bluejay
-ro.build.characteristics=nosdcard
-ro.build.type=user
-ro.build.tags=release-keys
 ro.debuggable=0
 ro.secure=1
-ro.test_harness=0

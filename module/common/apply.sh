@@ -331,12 +331,18 @@ hide_emulator_files_safe() {
   done
 }
 
-apply_all_props() {
+apply_boot_safe() {
   moddir="$1"
   apply_qemu_core
+  apply_all_apps_hide
   load_selected_profile "$moddir"
   apply_freecharge_reference_exact
-  apply_all_apps_hide
+  apply_phone_consistency_final
+}
+
+apply_all_props() {
+  moddir="$1"
+  apply_boot_safe "$moddir"
   apply_emulator_deep_hide
   apply_banking_extras
   apply_phone_consistency_final
