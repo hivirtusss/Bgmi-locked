@@ -72,6 +72,7 @@ if [ -f "$NVBASE/modules/$MODID/profile.conf" ]; then
 fi
 
 ui_print "Done Install"
+ui_print "Set profile.conf to match AVD: pixel9 | pixel9a | pixel7 | pixel6a"
 ui_print "Reboot -> Tap Action -> Reboot again"
 ui_print "Then KSU Hide Root ON for UPI apps"
 ui_print ""

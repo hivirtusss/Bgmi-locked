@@ -28,7 +28,7 @@ load_profile() {
     pixel7|panther)
       CODENAME=panther
       MODEL="Pixel 7"
-      FP="google/panther/panther:14/AP2A.240805.005/12025142:user/release-keys"
+      FP="google/panther/panther:16/BP31.250610.009/12025142:user/release-keys"
       ;;
     pixel9|tokay)
       CODENAME=tokay
