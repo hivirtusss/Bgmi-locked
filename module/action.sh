@@ -9,6 +9,16 @@ set +e
 STATUS_FILE="$MODDIR/state/detection_status"
 mkdir -p "$MODDIR/state"
 
+if [ "$KSU" = "true" ]; then
+  POWERED_BY="KernelSU"
+elif [ -n "$APATCH" ]; then
+  POWERED_BY="APatch"
+elif [ -n "$MAGISK_VER" ]; then
+  POWERED_BY="Magisk"
+else
+  POWERED_BY="KernelSU"
+fi
+
 pause() { sleep 0.35; }
 
 step() {
@@ -38,6 +48,15 @@ DEVICE=$(getprop ro.product.device)
 ANDROID=$(getprop ro.build.version.release)
 PATCH=$(getprop ro.build.version.security_patch)
 
+echo ""
+echo "  __     __  _   _ ____  _   _ ____  "
+echo "  \ \   / / | | | |  _ \| | | / ___| "
+echo "   \ \ / /  | | | | |_) | | | \___ \ "
+echo "    \ V /   | |_| |  _ <| |_| |___) |"
+echo "     \_/     \___/|_| \_\\___/|____/ "
+echo ""
+echo " VirtusFix Premium Root Hide V3 🔝"
+echo " Powered by: $POWERED_BY"
 echo ""
 echo "╔══════════════════════════════════════════════════════╗"
 echo "║     *VirtusFix - Premium Root Hide* ⚔️              ║"
