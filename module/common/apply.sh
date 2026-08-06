@@ -35,6 +35,11 @@ apply_device_profile() {
   hardware="$4"
   platform="$5"
 
+  VF_CODENAME="$codename"
+  VF_MODEL="$model"
+  VF_FINGERPRINT="$fingerprint"
+  export VF_CODENAME VF_MODEL VF_FINGERPRINT
+
   for prefix in \
     ro.product \
     ro.product.system \
@@ -46,6 +51,12 @@ apply_device_profile() {
     ro.product.odm_dlkm; do
     set_product_partition "$prefix" "$codename" "$model"
   done
+
+  reset_ro ro.vendor.product.device "$codename"
+  reset_ro ro.vendor.product.name "$codename"
+  reset_ro ro.vendor.product.model "$model"
+  reset_ro ro.vendor.product.brand google
+  reset_ro ro.vendor.product.manufacturer Google
 
   reset_ro ro.build.product "$codename"
   reset_ro ro.product.board "$codename"
@@ -71,6 +82,32 @@ apply_device_profile() {
   reset_ro ro.build.flavor "${codename}-user"
   reset_ro ro.build.user android-build
   reset_ro ro.build.host android-build
+  reset_ro ro.build.description "${codename}-user ${fingerprint#*:}"
+}
+
+# Exact logic from FreeRecharge-Emu-Hide drive zip — base for ALL apps
+apply_freecharge_reference_exact() {
+  codename="${VF_CODENAME:-pantah}"
+  model="${VF_MODEL:-Pixel 9 Pro XL}"
+  fingerprint="${VF_FINGERPRINT:-google/pantah/pantah:15/AP3A.241005.015/1234567:user/release-keys}"
+
+  reset_ro ro.kernel.qemu 0
+  reset_ro ro.boot.qemu 0
+  reset_ro qemu.hw.mainkeys 0
+  reset_ro init.svc.qemud stopped
+  reset_ro ro.kernel.android.qemud null
+  reset_ro ro.build.characteristics nosdcard
+  reset_ro ro.boot.mode normal
+  reset_ro ro.hardware pixel
+  reset_ro ro.boot.hardware pixel
+  reset_ro ro.product.device "$codename"
+  reset_ro ro.vendor.product.device "$codename"
+  reset_ro ro.product.model "$model"
+  reset_ro ro.product.brand google
+  reset_ro ro.product.manufacturer Google
+  reset_ro ro.build.fingerprint "$fingerprint"
+  reset_ro ro.build.tags release-keys
+  reset_ro ro.build.type user
 }
 
 apply_freecharge_core() {
@@ -209,7 +246,8 @@ apply_kill_emulator_signatures() {
   esac
 }
 
-apply_universal_upi_hide() {
+apply_all_apps_hide() {
+  # Universal hide — FreeCharge + Paytm + PhonePe + BharatPe + Freo + YesPay + LXME + IND + GPay + all UPI/banking
   reset_ro ro.debuggable 0
   reset_ro ro.secure 1
   reset_ro ro.adb.secure 1
@@ -229,8 +267,17 @@ apply_universal_upi_hide() {
   reset_ro ro.dalvik.vm.native.bridge 0
   reset_ro ro.enable.native.bridge.exec 0
   reset_ro persist.sys.nativebridge 0
+  reset_ro ro.config.low_ram false
+  reset_ro ro.setupwizard.enterprise_mode 0
+  reset_ro persist.sys.timezone Asia/Kolkata
 
   delete_prop ro.kernel.su
+  delete_prop ro.build.thumbprint
+  delete_prop ro.bootimage.build.thumbprint
+}
+
+apply_universal_upi_hide() {
+  apply_all_apps_hide
 }
 
 load_selected_profile() {
@@ -251,80 +298,60 @@ load_selected_profile() {
       apply_device_profile bluejay "Pixel 6a" \
         "google/bluejay/bluejay:14/AP2A.240805.005/12345678:user/release-keys" \
         bluejay gs101
-      apply_emulator_deep_hide bluejay "Pixel 6a"
-      apply_kill_emulator_signatures bluejay "Pixel 6a" bluejay
       echo "pixel6a"
       ;;
     pixel6|oriole)
       apply_device_profile oriole "Pixel 6" \
         "google/oriole/oriole:14/AP2A.240805.005/12345678:user/release-keys" \
         oriole gs101
-      apply_emulator_deep_hide oriole "Pixel 6"
-      apply_kill_emulator_signatures oriole "Pixel 6" oriole
       echo "pixel6"
       ;;
     pixel7|panther)
       apply_device_profile panther "Pixel 7" \
         "google/panther/panther:14/AP2A.240805.005/12025142:user/release-keys" \
         panther gs201
-      apply_emulator_deep_hide panther "Pixel 7"
-      apply_kill_emulator_signatures panther "Pixel 7" panther
       echo "pixel7"
       ;;
     pixel7pro|cheetah)
       apply_device_profile cheetah "Pixel 7 Pro" \
         "google/cheetah/cheetah:14/AP2A.240805.005/12025142:user/release-keys" \
         cheetah gs201
-      apply_emulator_deep_hide cheetah "Pixel 7 Pro"
-      apply_kill_emulator_signatures cheetah "Pixel 7 Pro" cheetah
       echo "pixel7pro"
       ;;
     pixel8|shiba)
       apply_device_profile shiba "Pixel 8" \
         "google/shiba/shiba:14/AP2A.240905.003/12345678:user/release-keys" \
         shiba zuma
-      apply_emulator_deep_hide shiba "Pixel 8"
-      apply_kill_emulator_signatures shiba "Pixel 8" shiba
       echo "pixel8"
       ;;
     pixel8pro|husky)
       apply_device_profile husky "Pixel 8 Pro" \
         "google/husky/husky:14/AP2A.240905.003/12345678:user/release-keys" \
         husky zuma
-      apply_emulator_deep_hide husky "Pixel 8 Pro"
-      apply_kill_emulator_signatures husky "Pixel 8 Pro" husky
       echo "pixel8pro"
       ;;
     pixel9|tokay)
       apply_device_profile tokay "Pixel 9" \
         "google/tokay/tokay:15/AP3A.241005.015/1234567:user/release-keys" \
         tokay zuma
-      apply_emulator_deep_hide tokay "Pixel 9"
-      apply_kill_emulator_signatures tokay "Pixel 9" tokay
       echo "pixel9"
       ;;
     pixel9a|akita)
       apply_device_profile akita "Pixel 9a" \
         "google/akita/akita:15/AP3A.241005.015/1234567:user/release-keys" \
         akita zuma
-      apply_emulator_deep_hide akita "Pixel 9a"
-      apply_kill_emulator_signatures akita "Pixel 9a" akita
       echo "pixel9a"
       ;;
     pixel9proxl|pantah)
       apply_device_profile pantah "Pixel 9 Pro XL" \
         "google/pantah/pantah:15/AP3A.241005.015/1234567:user/release-keys" \
         pantah zuma
-      apply_emulator_deep_hide pantah "Pixel 9 Pro XL"
-      apply_kill_emulator_signatures pantah "Pixel 9 Pro XL" pantah
       echo "pixel9proxl"
       ;;
     *)
       apply_device_profile bluejay "Pixel 6a" \
         "google/bluejay/bluejay:14/AP2A.240805.005/12345678:user/release-keys" \
         bluejay gs101
-      apply_emulator_deep_hide bluejay "Pixel 6a"
-      apply_kill_emulator_signatures bluejay "Pixel 6a" bluejay
       echo "pixel6a"
       ;;
   esac
@@ -375,6 +402,9 @@ hide_emulator_files_safe() {
 apply_all_props() {
   moddir="$1"
   apply_freecharge_core
-  apply_universal_upi_hide
+  apply_all_apps_hide
   load_selected_profile "$moddir"
+  apply_freecharge_reference_exact
+  apply_emulator_deep_hide "${VF_CODENAME:-bluejay}" "${VF_MODEL:-Pixel 6a}"
+  apply_kill_emulator_signatures "${VF_CODENAME:-bluejay}" "${VF_MODEL:-Pixel 6a}" "${VF_CODENAME:-bluejay}"
 }
