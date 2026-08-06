@@ -63,7 +63,7 @@ set_perm_recursive "$MODPATH/icon" 0 0 0755 0644
 
 echo "WAIT" > "$MODPATH/state/detection_status"
 grep -v '^description=' "$MODPATH/module.prop" > "$MODPATH/state/prop.tmp" 2>/dev/null
-echo 'description=Tap Action then Reboot | By @Hivirtus' >> "$MODPATH/state/prop.tmp"
+echo 'description=❌ Tap Action 🎯 then Hide Root in KernelSU @Hivirtus ❤️' >> "$MODPATH/state/prop.tmp"
 cat "$MODPATH/state/prop.tmp" > "$MODPATH/module.prop"
 rm -f "$MODPATH/state/prop.tmp"
 
@@ -71,10 +71,12 @@ if [ -f "$NVBASE/modules/$MODID/profile.conf" ]; then
   cp -f "$NVBASE/modules/$MODID/profile.conf" "$MODPATH/profile.conf"
 fi
 
-ui_print "Done Install"
-ui_print "Set profile.conf to match AVD: pixel9 | pixel9a | pixel7 | pixel6a"
-ui_print "Reboot -> Tap Action -> Reboot again"
-ui_print "Then KSU Hide Root ON for UPI apps"
+ui_print "Done Install ✅"
+ui_print "Reboot device to activate"
+ui_print "Then Press Action Button 🎯"
+ui_print ""
+ui_print "⚠️ KernelSU → BharatPe/Freo"
+ui_print "   → Hide Root ON (required!)"
 ui_print ""
 ui_print "Developed By @Hivirtus"
 ui_print "Redirecting to Telegram @clamflat..."

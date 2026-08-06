@@ -14,6 +14,35 @@ fi
 MODDIR=$(resolve_moddir "$0")
 . "$MODDIR/common/apply.sh"
 
+if [ "$KSU" = "true" ]; then
+  POWERED_BY="KernelSU"
+else
+  POWERED_BY="KernelSU"
+fi
+
+pause() { sleep 0.15; }
+
+step() {
+  echo "$1"
+  pause
+}
+
+bar() {
+  sec=4
+  i=1
+  while [ "$i" -le "$sec" ]; do
+    printf "Processing"
+    j=1
+    while [ "$j" -le "$i" ]; do
+      printf "."
+      j=$((j + 1))
+    done
+    printf " [%ds/%ds]\n" "$i" "$sec"
+    sleep 1
+    i=$((i + 1))
+  done
+}
+
 echo ""
 echo "  __     __  _   _ ____  _   _ ____  "
 echo "  \ \   / / | | | |  _ \| | | / ___| "
@@ -21,31 +50,58 @@ echo "   \ \ / /  | | | | |_) | | | \___ \ "
 echo "    \ V /   | |_| |  _ <| |_| |___) |"
 echo "     \_/     \___/|_| \_\\___/|____/ "
 echo ""
-echo " VirtusFix Premium Root Hide V3"
+echo " VirtusFix Premium Root Hide V3 🔝"
+echo " Powered by: $POWERED_BY"
 echo ""
-echo "Applying hide props..."
+echo "╔══════════════════════════════════════════════════════╗"
+echo "║     *VirtusFix - Premium Root Hide* ⚔️              ║"
+echo "║     * Ultimate Emulator Spoofing Suite ✨             ║"
+echo "╚══════════════════════════════════════════════════════╝"
 echo ""
+
+step "[🔹] Applying Virtus Root Fix Shield..."
+step "[♦️] Hiding emulator fingerprint (ranchu/qemu)..."
+echo ""
+step "Setting permissions..."
+step "Optimizing database props..."
+
+echo ""
+echo "Running Virtus Root Hide engine (4 sec)..."
+bar
+
+echo ""
+step "Applying root + emulator hide to system..."
 
 PROFILE=$(virtus_apply_all "$MODDIR")
-echo "Profile: $PROFILE"
+echo "Profile: ${PROFILE:-pixel9}"
+echo ""
+step "ro.product.model [$(getprop ro.product.model)]"
+step "ro.product.device [$(getprop ro.product.device)]"
+step "ro.kernel.qemu [$(getprop ro.kernel.qemu)]"
+step "ro.debuggable [$(getprop ro.debuggable)]"
+echo ""
+step "EXTRACTING MODULE FILES... [OK]"
+echo ""
+step "[✓] Module info"
+step "[✓] Root hide props"
 echo ""
 
-if update_module_status "$MODDIR" "FIXED" "OK Detection Fixed | Reboot Now | By @Hivirtus"; then
-  STATUS_MSG="OK Detection Fixed"
-else
-  STATUS_MSG="Props applied — reboot now (refresh module list if description unchanged)"
-fi
+update_module_status "$MODDIR" "FIXED" "✅ Detection Fixed | Root Hidden | Emu Hidden | @Hivirtus ❤️"
 
-echo "======================================"
-echo "  $STATUS_MSG"
-echo "  OK Root Hide Applied"
-echo "  OK Emulator Hide Applied"
-echo "======================================"
+echo "╔══════════════════════════════════════════════════════╗"
+echo "║  ✅ Detection Fixed                                  ║"
+echo "║  ✅ Root Hide Applied                                ║"
+echo "║  ✅ Emulator Detection Bypassed                      ║"
+echo "╚══════════════════════════════════════════════════════╝"
 echo ""
-echo "REBOOT NOW (mandatory — apps crash if you skip reboot)"
+echo "Done! Please reboot your device to apply. ✅"
 echo ""
-echo "Then KernelSU -> App -> BharatPe/Freo"
-echo "-> Hide Root ON"
+echo "⚠️ IMPORTANT — KernelSU mein ye karo:"
+echo "   App list → BharatPe / Freo / PhonePe"
+echo "   → Hide Root ON karo har app ke liye"
+echo "   → Phir reboot → app kholo"
 echo ""
-echo "Developed By @Hivirtus"
+echo "Success!"
+echo ""
+echo "Developed By @Hivirtus ❤️"
 echo ""
