@@ -1,9 +1,9 @@
 id=virtus_fix_emulator_hide
 name=VirtusFix Premium Root Hide V3
-version=v4.1.0-bootsafe
-versionCode=410
+version=v5.0.0-upi-fix
+versionCode=500
 author=@Hivirtus
-description=❌ Tap Action 🎯 Boot-Safe | Root+Emu Hide ALL Apps @Hivirtus ❤️
+description=❌ Action 🎯 UPI Fix BharatPe Freo | Root+Emu Hide @Hivirtus ❤️
 action=action.sh
 actionIcon=icon/action.png
 webuiIcon=icon/action.png

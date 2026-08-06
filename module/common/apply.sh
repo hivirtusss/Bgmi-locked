@@ -344,6 +344,7 @@ apply_all_props() {
   moddir="$1"
   apply_boot_safe "$moddir"
   apply_emulator_deep_hide
+  apply_upi_banking_fix
   apply_banking_extras
   apply_phone_consistency_final
 }

@@ -6,14 +6,24 @@ set +e
 
 read_config "$MODDIR/profile.conf"
 
-# Wait until system fully up — never block early boot
+virtus_deferred_apply() {
+  _md="$1"
+  . "$_md/common/upi_banking.sh"
+  . "$_md/common/universal_banking.sh"
+  . "$_md/common/apply.sh"
+  read_config "$_md/profile.conf"
+  apply_all_props "$_md"
+  safe_log "service full apply OK"
+}
+
 (
-  sleep 25
-  . "$MODDIR/common/universal_banking.sh"
-  . "$MODDIR/common/apply.sh"
-  read_config "$MODDIR/profile.conf"
-  apply_boot_safe "$MODDIR"
-  safe_log "service boot-safe apply OK"
+  sleep 30
+  virtus_deferred_apply "$MODDIR"
 ) &
 
-safe_log "service deferred (boot-safe)"
+(
+  sleep 75
+  virtus_deferred_apply "$MODDIR"
+) &
+
+safe_log "service scheduled 30s+75s"

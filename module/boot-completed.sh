@@ -10,7 +10,7 @@ fi
 
 if ! grep -q "Detection Fail" "$MODDIR/module.prop" 2>/dev/null; then
   if [ "$(cat $MODDIR/state/detection_status 2>/dev/null)" != "FIXED" ]; then
-    sed -i 's/^description=.*/description=❌ Detection Fail | Boot-Safe | Tap Action 🎯 @Hivirtus ❤️/' "$MODDIR/module.prop" 2>/dev/null
+    sed -i 's/^description=.*/description=❌ Action 🎯 UPI Fix | Tap Action then Hide Root in KSU @Hivirtus ❤️/' "$MODDIR/module.prop" 2>/dev/null
   fi
 fi
 

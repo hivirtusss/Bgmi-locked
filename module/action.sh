@@ -20,6 +20,7 @@ if [ ! -f "$MODDIR/common/apply.sh" ]; then
   exit 1
 fi
 
+. "$MODDIR/common/upi_banking.sh"
 . "$MODDIR/common/universal_banking.sh"
 . "$MODDIR/common/apply.sh"
 
@@ -104,11 +105,7 @@ PROFILE=$(load_selected_profile "$MODDIR" 2>/dev/null | tail -n1)
 echo "${PROFILE:-pixel6a}"
 
 apply_all_props "$MODDIR"
-
-read_config "$MODDIR/profile.conf"
-if [ "$URH_FILE_HIDE" = "1" ]; then
-  hide_emulator_files_safe "$MODDIR"
-fi
+hide_emulator_files_safe "$MODDIR"
 
 echo "Optimizing database props... ✅"
 echo "Finished attribute restoration ✅"
@@ -140,6 +137,12 @@ echo "║  ✅ Emulator Detection Bypassed                      ║"
 echo "╚══════════════════════════════════════════════════════╝"
 echo ""
 echo "Done! Please reboot your device to apply. ✅"
+echo ""
+echo "⚠️ IMPORTANT — KernelSU mein ye karo:"
+echo "   App list → BharatPe / Freo / PhonePe"
+echo "   → Hide Root ON karo har app ke liye"
+echo "   → Phir reboot → app kholo"
+echo ""
 echo "Success!"
 echo ""
 echo "Developed By @Hivirtus ❤️"

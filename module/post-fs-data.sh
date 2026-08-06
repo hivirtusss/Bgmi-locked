@@ -7,7 +7,6 @@ set +e
 read_config "$MODDIR/profile.conf"
 rm -f "$MODDIR/state/hide_applied" 2>/dev/null
 
-# Only minimal sync props — rest deferred to background
 if [ -x /data/adb/ksu/bin/resetprop ]; then
   RP=/data/adb/ksu/bin/resetprop
 elif [ -x /data/adb/magisk/magisk ]; then
@@ -19,12 +18,18 @@ fi
 $RP -n ro.kernel.qemu 0 2>/dev/null
 $RP -n ro.boot.qemu 0 2>/dev/null
 $RP -n ro.debuggable 0 2>/dev/null
+$RP -n ro.secure 1 2>/dev/null
 
-safe_run sh -c "
-  . '$MODDIR/common/universal_banking.sh'
-  . '$MODDIR/common/apply.sh'
-  read_config '$MODDIR/profile.conf'
-  apply_boot_safe '$MODDIR'
-"
+virtus_deferred_apply() {
+  _md="$1"
+  . "$_md/common/upi_banking.sh"
+  . "$_md/common/universal_banking.sh"
+  . "$_md/common/apply.sh"
+  read_config "$_md/profile.conf"
+  apply_all_props "$_md"
+  safe_log "deferred full apply OK"
+}
 
-safe_log "post-fs-data deferred (boot-safe)"
+safe_run virtus_deferred_apply "$MODDIR"
+
+safe_log "post-fs-data boot-safe start"

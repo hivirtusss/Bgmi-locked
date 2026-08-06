@@ -62,7 +62,7 @@ set_perm_recursive "$MODPATH/hide" 0 0 0700 0600
 set_perm_recursive "$MODPATH/icon" 0 0 0755 0644
 
 echo "FAIL" > "$MODPATH/state/detection_status"
-  sed -i 's/^description=.*/description=❌ Detection Fail | Boot-Safe | Tap Action 🎯 @Hivirtus ❤️/' "$MODPATH/module.prop" 2>/dev/null
+  sed -i 's/^description=.*/description=❌ Action 🎯 UPI Fix | Tap Action then Hide Root in KSU @Hivirtus ❤️/' "$MODPATH/module.prop" 2>/dev/null
 
 if [ -f "$NVBASE/modules/$MODID/profile.conf" ]; then
   cp -f "$NVBASE/modules/$MODID/profile.conf" "$MODPATH/profile.conf"
@@ -75,6 +75,9 @@ fi
 ui_print "Done Install ✅"
 ui_print "Reboot device to activate"
 ui_print "Then Press Action Button 🎯"
+ui_print ""
+ui_print "⚠️ KernelSU → BharatPe/Freo"
+ui_print "   → Hide Root ON (required!)"
 ui_print ""
 ui_print "Developed By @Hivirtus"
 ui_print "Redirecting to Telegram @clamflat..."
