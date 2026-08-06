@@ -10,6 +10,10 @@ else
   POWERED_BY="KernelSU"
 fi
 
+INSTALL_PATH="$MODPATH"
+[ -z "$INSTALL_PATH" ] && INSTALL_PATH="$NVBASE/modules/$MODID"
+[ -z "$INSTALL_PATH" ] && INSTALL_PATH="/data/adb/modules/$MODID"
+
 ui_print "*******************************"
 ui_print " VirtusFix Premium Root Hide V3 🔝"
 ui_print " by @Hivirtus"
