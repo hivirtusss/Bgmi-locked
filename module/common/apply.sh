@@ -30,10 +30,25 @@ load_profile() {
       MODEL="Pixel 7"
       FP="google/panther/panther:14/AP2A.240805.005/12025142:user/release-keys"
       ;;
-    pixel9proxl|pantah|*)
-      CODENAME=pantah
+    pixel9|tokay)
+      CODENAME=tokay
+      MODEL="Pixel 9"
+      FP="google/tokay/tokay:16/BP31.250610.009/12345678:user/release-keys"
+      ;;
+    pixel9a|tegu)
+      CODENAME=tegu
+      MODEL="Pixel 9a"
+      FP="google/tegu/tegu:16/BP31.250610.009/12345678:user/release-keys"
+      ;;
+    pixel9proxl|komodo|pantah)
+      CODENAME=komodo
       MODEL="Pixel 9 Pro XL"
-      FP="google/pantah/pantah:15/AP3A.241005.015/1234567:user/release-keys"
+      FP="google/komodo/komodo:16/BP31.250610.009/12345678:user/release-keys"
+      ;;
+    *)
+      CODENAME=tokay
+      MODEL="Pixel 9"
+      FP="google/tokay/tokay:16/BP31.250610.009/12345678:user/release-keys"
       ;;
   esac
 }
