@@ -4,6 +4,7 @@ MODDIR=${0%/*}
 
 set +e
 . "$MODDIR/common/safe_boot.sh"
+. "$MODDIR/common/universal_banking.sh"
 . "$MODDIR/common/apply.sh"
 
 STATUS_FILE="$MODDIR/state/detection_status"

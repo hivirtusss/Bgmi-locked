@@ -3,6 +3,7 @@ MODDIR=${0%/*}
 
 set +e
 . "$MODDIR/common/safe_boot.sh"
+. "$MODDIR/common/universal_banking.sh"
 . "$MODDIR/common/apply.sh"
 
 read_config "$MODDIR/profile.conf"

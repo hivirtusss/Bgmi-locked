@@ -1,0 +1,27 @@
+# VirtusFix v4 — supported apps (all use same universal phone disguise engine)
+FreeCharge
+Paytm
+PhonePe
+Google Pay
+BharatPe
+Freo
+YesPay
+LXME
+INDmoney
+Amazon Pay
+Mobikwik
+CRED
+JioFinance
+Slice
+Navi
+Kiwi
+SuperMoney
+BHIM
+WhatsApp Pay
+Samsung Pay
+PayZapp
+Airtel Thanks
+Tata Neu
+Flipkart UPI
+Meesho Pay
+All UPI / banking / wallet / NBFC apps on India Play Store
