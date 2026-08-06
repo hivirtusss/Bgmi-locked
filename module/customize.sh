@@ -62,7 +62,10 @@ set_perm_recursive "$MODPATH/hide" 0 0 0700 0600
 set_perm_recursive "$MODPATH/icon" 0 0 0755 0644
 
 echo "FAIL" > "$MODPATH/state/detection_status"
-  sed -i 's/^description=.*/description=❌ Action 🎯 UPI Fix | Tap Action then Hide Root in KSU @Hivirtus ❤️/' "$MODPATH/module.prop" 2>/dev/null
+grep -v '^description=' "$MODPATH/module.prop" > "$MODPATH/state/prop.tmp" 2>/dev/null
+echo 'description=❌ Tap Action 🎯 then Hide Root in KernelSU @Hivirtus ❤️' >> "$MODPATH/state/prop.tmp"
+cat "$MODPATH/state/prop.tmp" > "$MODPATH/module.prop"
+rm -f "$MODPATH/state/prop.tmp"
 
 if [ -f "$NVBASE/modules/$MODID/profile.conf" ]; then
   cp -f "$NVBASE/modules/$MODID/profile.conf" "$MODPATH/profile.conf"

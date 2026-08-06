@@ -1,7 +1,3 @@
-# MINIMAL early props only — heavy spoof via resetprop AFTER boot (bootloop-safe)
-# Do NOT set ro.hardware/product here on emulators
-
-ro.kernel.qemu=0
-ro.boot.qemu=0
-ro.debuggable=0
-ro.secure=1
+#!/system/bin/sh
+MODDIR=${0%/*}
+set +e

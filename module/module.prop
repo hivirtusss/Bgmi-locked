@@ -1,9 +1,9 @@
 id=virtus_fix_emulator_hide
 name=VirtusFix Premium Root Hide V3
-version=v5.0.0-upi-fix
-versionCode=500
+version=v6.0.0-stable
+versionCode=600
 author=@Hivirtus
-description=❌ Action 🎯 UPI Fix BharatPe Freo | Root+Emu Hide @Hivirtus ❤️
+description=❌ Tap Action 🎯 then Hide Root in KernelSU @Hivirtus ❤️
 action=action.sh
 actionIcon=icon/action.png
 webuiIcon=icon/action.png
