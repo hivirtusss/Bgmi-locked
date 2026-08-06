@@ -1,6 +1,33 @@
 #!/system/bin/sh
 # Boot-safe wrapper — never block or crash boot
 
+VIRTUS_MODULE_ID=virtus_fix_emulator_hide
+
+resolve_moddir() {
+  _script="$1"
+  _base=${_script%/*}
+
+  if [ -n "$_base" ] && [ "$_base" != "$_script" ] && [ -f "$_base/module.prop" ]; then
+    echo "$_base"
+    return 0
+  fi
+
+  for _p in \
+    "/data/adb/modules/$VIRTUS_MODULE_ID" \
+    "/data/adb/modules_update/$VIRTUS_MODULE_ID"; do
+    if [ -f "$_p/module.prop" ]; then
+      echo "$_p"
+      return 0
+    fi
+  done
+
+  if [ -n "$_base" ] && [ "$_base" != "$_script" ]; then
+    echo "$_base"
+  else
+    echo "/data/adb/modules/$VIRTUS_MODULE_ID"
+  fi
+}
+
 safe_log() {
   /system/bin/log -t virtus_fix -p i "$1" 2>/dev/null || true
 }

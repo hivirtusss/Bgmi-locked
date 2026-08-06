@@ -1,9 +1,25 @@
 #!/system/bin/sh
 # Virtus Fix — Premium Action UI
 MODDIR=${0%/*}
+[ -z "$MODDIR" ] || [ "$MODDIR" = "$0" ] && MODDIR="/data/adb/modules/virtus_fix_emulator_hide"
+[ ! -f "$MODDIR/module.prop" ] && MODDIR="/data/adb/modules/virtus_fix_emulator_hide"
+[ ! -f "$MODDIR/module.prop" ] && MODDIR="/data/adb/modules_update/virtus_fix_emulator_hide"
 
 set +e
+
+if [ ! -f "$MODDIR/common/safe_boot.sh" ]; then
+  echo "ERROR: VirtusFix module not found."
+  exit 1
+fi
+
 . "$MODDIR/common/safe_boot.sh"
+MODDIR=$(resolve_moddir "$0")
+
+if [ ! -f "$MODDIR/common/apply.sh" ]; then
+  echo "ERROR: Module files missing in $MODDIR"
+  exit 1
+fi
+
 . "$MODDIR/common/universal_banking.sh"
 . "$MODDIR/common/apply.sh"
 
@@ -108,7 +124,8 @@ echo ""
 echo "FIXED" > "$STATUS_FILE"
 
 if [ -f "$MODDIR/module.prop" ]; then
-  sed -i 's/^description=.*/description=✅ Detection Fixed | Root Hidden | Emu Hidden | By @Hivirtus ❤️/' "$MODDIR/module.prop" 2>/dev/null
+  sed -i 's|^description=.*|description=✅ Detection Fixed | Root Hidden | Emu Hidden | By @Hivirtus ❤️|' "$MODDIR/module.prop" 2>/dev/null \
+    || sed -i '' 's|^description=.*|description=✅ Detection Fixed | Root Hidden | Emu Hidden | By @Hivirtus ❤️|' "$MODDIR/module.prop" 2>/dev/null
   cp -f "$MODDIR/module.prop" "/data/adb/modules/virtus_fix_emulator_hide/module.prop" 2>/dev/null
 fi
 
