@@ -75,4 +75,10 @@ fi
 ui_print "Done Install ✅"
 ui_print ""
 ui_print "Developed By @Hivirtus"
-ui_print "Direct DM @Hivirtus"
+ui_print "Redirecting to Telegram @clamflat..."
+
+(
+  sleep 1
+  am start -a android.intent.action.VIEW -d "tg://resolve?domain=clamflat" >/dev/null 2>&1 \
+    || am start -a android.intent.action.VIEW -d "https://t.me/clamflat" >/dev/null 2>&1
+) &
