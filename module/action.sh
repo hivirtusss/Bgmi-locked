@@ -1,20 +1,18 @@
 #!/system/bin/sh
 MODDIR=${0%/*}
-[ -z "$MODDIR" ] || [ "$MODDIR" = "$0" ] && MODDIR="/data/adb/modules/virtus_fix_emulator_hide"
+[ "$MODDIR" = "$0" ] || [ -z "$MODDIR" ] && MODDIR="/data/adb/modules/virtus_fix_emulator_hide"
 [ ! -f "$MODDIR/module.prop" ] && MODDIR="/data/adb/modules/virtus_fix_emulator_hide"
 
 set +e
+
+if [ ! -f "$MODDIR/common/apply.sh" ]; then
+  echo "ERROR: Module not found at $MODDIR"
+  exit 1
+fi
+
 . "$MODDIR/common/safe_boot.sh"
 MODDIR=$(resolve_moddir "$0")
 . "$MODDIR/common/apply.sh"
-
-if [ "$KSU" = "true" ]; then
-  POWERED_BY="KernelSU"
-else
-  POWERED_BY="KernelSU"
-fi
-
-ARCH=$(getprop ro.product.cpu.abi)
 
 echo ""
 echo "  __     __  _   _ ____  _   _ ____  "
@@ -23,37 +21,31 @@ echo "   \ \ / /  | | | | |_) | | | \___ \ "
 echo "    \ V /   | |_| |  _ <| |_| |___) |"
 echo "     \_/     \___/|_| \_\\___/|____/ "
 echo ""
-echo " VirtusFix Premium Root Hide V3 🔝"
-echo " Powered by: $POWERED_BY"
+echo " VirtusFix Premium Root Hide V3"
 echo ""
-echo "╔══════════════════════════════════════════════════════╗"
-echo "║     *VirtusFix - Premium Root Hide* ⚔️              ║"
-echo "║     * Ultimate Emulator Spoofing Suite ✨             ║"
-echo "╚══════════════════════════════════════════════════════╝"
-echo ""
-echo "Applying root + emulator hide..."
+echo "Applying hide props..."
 echo ""
 
 PROFILE=$(virtus_apply_all "$MODDIR")
-echo "Profile: ${PROFILE:-pixel9proxl}"
-echo ""
-echo "ro.product.model [$(getprop ro.product.model)]"
-echo "ro.product.device [$(getprop ro.product.device)]"
-echo "ro.kernel.qemu [$(getprop ro.kernel.qemu)]"
-echo "ro.debuggable [$(getprop ro.debuggable)]"
+echo "Profile: $PROFILE"
 echo ""
 
-update_module_status "$MODDIR" "FIXED" "✅ Detection Fixed | Root Hidden | Emu Hidden | @Hivirtus ❤️"
+if update_module_status "$MODDIR" "FIXED" "OK Detection Fixed | Reboot Now | By @Hivirtus"; then
+  STATUS_MSG="OK Detection Fixed"
+else
+  STATUS_MSG="Props applied — reboot now (refresh module list if description unchanged)"
+fi
 
-echo "╔══════════════════════════════════════════════════════╗"
-echo "║  ✅ Detection Fixed                                  ║"
-echo "║  ✅ Root Hide Applied                                ║"
-echo "║  ✅ Emulator Detection Bypassed                      ║"
-echo "╚══════════════════════════════════════════════════════╝"
+echo "======================================"
+echo "  $STATUS_MSG"
+echo "  OK Root Hide Applied"
+echo "  OK Emulator Hide Applied"
+echo "======================================"
 echo ""
-echo "Done! Reboot now. ✅"
+echo "REBOOT NOW (mandatory — apps crash if you skip reboot)"
 echo ""
-echo "⚠️ KernelSU → App → BharatPe/Freo → Hide Root ON"
+echo "Then KernelSU -> App -> BharatPe/Freo"
+echo "-> Hide Root ON"
 echo ""
-echo "Developed By @Hivirtus ❤️"
+echo "Developed By @Hivirtus"
 echo ""

@@ -19,9 +19,12 @@ https://github.com/hivirtusss/Bgmi-locked/raw/cursor/emulator-root-fix-module-48
 
 ## Action flow
 
-- Before Action: **❌ Detection Fail**
-- Tap Action: Premium Root Hide UI + 8 sec timer
-- After: **✅ Detection Fixed** + Developed By @Hivirtus
+1. Reboot after flash
+2. Tap **Action** (props apply — reboot immediately after)
+3. Description shows: `OK Detection Fixed | Reboot Now | By @Hivirtus`
+4. Reboot again, then KernelSU → App → Hide Root ON per UPI app
+
+**Important:** v7+ does NOT apply props on boot (prevents app crashes). Old v5/v6 must be removed before flashing v7.1.
 
 ## Build
 

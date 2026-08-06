@@ -1,3 +1,1 @@
-#!/system/bin/sh
-MODDIR=${0%/*}
-set +e
+# VirtusFix — props apply via Action only (resetprop). Keep this file empty.

@@ -1,9 +1,9 @@
 id=virtus_fix_emulator_hide
 name=VirtusFix Premium Root Hide V3
-version=v6.0.0-stable
-versionCode=600
+version=v7.0.1-stable
+versionCode=701
 author=@Hivirtus
-description=❌ Tap Action 🎯 then Hide Root in KernelSU @Hivirtus ❤️
+description=Tap Action then Reboot | Props apply on Action only @Hivirtus
 action=action.sh
 actionIcon=icon/action.png
 webuiIcon=icon/action.png

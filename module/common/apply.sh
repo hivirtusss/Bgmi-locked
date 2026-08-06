@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# VirtusFix v6 — proven FreeRecharge core + minimal universal (no crash props)
+# VirtusFix v7 — FreeRecharge exact ONLY (Action applies, boot does nothing)
 
 if [ -x /data/adb/ksu/bin/resetprop ]; then
   RESETPROP=/data/adb/ksu/bin/resetprop
@@ -11,10 +11,6 @@ fi
 
 reset_ro() {
   $RESETPROP -n "$1" "$2" 2>/dev/null || $RESETPROP "$1" "$2" 2>/dev/null || true
-}
-
-delete_prop() {
-  $RESETPROP --delete "$1" 2>/dev/null || true
 }
 
 load_profile() {
@@ -42,12 +38,11 @@ load_profile() {
   esac
 }
 
-# Main apply — same as working FreeRecharge drive zip + safe extras only
+# Exact FreeRecharge drive zip — nothing extra (prevents app crash)
 virtus_apply_all() {
   moddir="$1"
   load_profile "$moddir"
 
-  # === FreeRecharge exact (proven working) ===
   reset_ro ro.kernel.qemu 0
   reset_ro ro.boot.qemu 0
   reset_ro qemu.hw.mainkeys 0
@@ -66,22 +61,6 @@ virtus_apply_all() {
   reset_ro ro.build.tags release-keys
   reset_ro ro.build.type user
 
-  # === Minimal universal (all UPI apps, boot-safe) ===
-  reset_ro ro.debuggable 0
-  reset_ro ro.secure 1
-  reset_ro ro.adb.secure 1
-  reset_ro service.adb.root 0
-  reset_ro ro.boot.verifiedbootstate green
-  reset_ro ro.boot.flash.locked 1
-  reset_ro ro.boot.vbmeta.device_state locked
-  reset_ro ro.dalvik.vm.native.bridge 0
-  reset_ro ro.magisk.version ""
-  reset_ro ro.magisk.versioncode 0
-
-  delete_prop ro.boot.qemu.avd_name
-  delete_prop ro.boot.qemu.settings.android.avd_name
-  delete_prop ro.kernel.su
-
   echo "$CODENAME"
 }
 
@@ -90,18 +69,43 @@ update_module_status() {
   status="$2"
   desc="$3"
   mp="$moddir/module.prop"
-  tmp="$moddir/state/prop.tmp"
+  tmp="$moddir/state/prop.new"
 
   mkdir -p "$moddir/state"
   echo "$status" > "$moddir/state/detection_status"
 
-  if [ -f "$mp" ]; then
-    grep -v '^description=' "$mp" > "$tmp" 2>/dev/null || cat "$mp" > "$tmp"
-    echo "description=$desc" >> "$tmp"
-    cat "$tmp" > "$mp"
-    rm -f "$tmp"
-    cp -f "$mp" "/data/adb/modules/virtus_fix_emulator_hide/module.prop" 2>/dev/null
-  fi
+  [ ! -f "$mp" ] && return 1
+
+  : > "$tmp"
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      description=*) printf '%s\n' "description=$desc" >> "$tmp" ;;
+      *) printf '%s\n' "$line" >> "$tmp" ;;
+    esac
+  done < "$mp"
+
+  cp -f "$tmp" "$mp" 2>/dev/null || cat "$tmp" > "$mp" 2>/dev/null
+  rm -f "$tmp"
+  chmod 644 "$mp" 2>/dev/null
+
+  for inst in \
+    "/data/adb/modules/virtus_fix_emulator_hide/module.prop" \
+    "/data/adb/modules_update/virtus_fix_emulator_hide/module.prop"
+  do
+    cp -f "$mp" "$inst" 2>/dev/null
+    chmod 644 "$inst" 2>/dev/null
+  done
+
+  sync 2>/dev/null || true
+  return 0
+}
+
+read_boot_config() {
+  moddir="$1"
+  BOOT_APPLY=0
+  [ -f "$moddir/profile.conf" ] || return 0
+  ba=$(grep -E '^boot_apply=' "$moddir/profile.conf" 2>/dev/null | head -n1 | cut -d= -f2 | tr -d ' "\r')
+  [ "$ba" = "1" ] && BOOT_APPLY=1
 }
 
 apply_all_props() {
@@ -113,5 +117,5 @@ apply_boot_safe() {
 }
 
 hide_emulator_files_safe() {
-  : # disabled v6 — bind mounts were causing app crashes
+  :
 }
