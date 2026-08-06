@@ -73,6 +73,8 @@ if [ -f "$NVBASE/modules/$MODID/state/detection_status" ]; then
 fi
 
 ui_print "Done Install ✅"
+ui_print "Reboot device to activate"
+ui_print "Then Press Action Button 🎯"
 ui_print ""
 ui_print "Developed By @Hivirtus"
 ui_print "Redirecting to Telegram @clamflat..."
