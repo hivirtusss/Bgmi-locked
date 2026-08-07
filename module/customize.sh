@@ -63,7 +63,7 @@ set_perm_recursive "$MODPATH/icon" 0 0 0755 0644
 
 echo "WAIT" > "$MODPATH/state/detection_status"
 grep -v '^description=' "$MODPATH/module.prop" > "$MODPATH/state/prop.tmp" 2>/dev/null
-echo 'description=❌ Tap Action 🎯 then Reboot | Emulator Hide @Hivirtus ❤️' >> "$MODPATH/state/prop.tmp"
+echo 'description=❌ Tap Action 🎯 | BharatPe Jio FreeCharge Fix @Hivirtus ❤️' >> "$MODPATH/state/prop.tmp"
 cat "$MODPATH/state/prop.tmp" > "$MODPATH/module.prop"
 rm -f "$MODPATH/state/prop.tmp"
 
@@ -75,7 +75,7 @@ ui_print "Done Install ✅"
 ui_print "Reboot device to activate"
 ui_print "Then Press Action Button 🎯"
 ui_print ""
-ui_print "⚠️ Action tap karo → turant Reboot (crash fix)"
+ui_print "⚠️ Reboot → Action → Reboot → KSU Hide Root ON"
 ui_print ""
 ui_print "Developed By @Hivirtus"
 ui_print "Redirecting to Telegram @clamflat..."

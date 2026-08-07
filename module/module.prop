@@ -1,9 +1,9 @@
 id=virtus_fix_emulator_hide
 name=VirtusFix Emulator Crash Fix
-version=v8.0.1-crash-safe
-versionCode=801
+version=v8.2.0-banking
+versionCode=820
 author=@Hivirtus
-description=❌ Tap Action 🎯 then Reboot | Emulator Hide No Crash @Hivirtus ❤️
+description=❌ Tap Action 🎯 | BharatPe Jio FreeCharge Fix @Hivirtus ❤️
 action=action.sh
 actionIcon=icon/action.png
 webuiIcon=icon/action.png

@@ -7,11 +7,11 @@ MODDIR=$(resolve_moddir "$0")
 
 read_boot_config "$MODDIR"
 
-# Default: NO props on boot = NO app crash
-if [ "$BOOT_APPLY" != "1" ]; then
-  safe_log "boot skip — tap Action only"
+# Default: apply at boot before apps start (crash-safe)
+if [ "$BOOT_APPLY" = "0" ]; then
+  safe_log "boot skip — Action only"
   exit 0
 fi
 
 virtus_apply_all "$MODDIR"
-safe_log "post-fs-data OK"
+safe_log "post-fs-data emu-hide OK"

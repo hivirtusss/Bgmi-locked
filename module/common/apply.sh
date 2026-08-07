@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# VirtusFix v8.1 — crash-safe emulator detection hide (minimal props only)
+# VirtusFix v8.2 — FreeRecharge core + real fingerprint (BharatPe/Jio/FreeCharge no crash)
 
 if [ -x /data/adb/ksu/bin/resetprop ]; then
   RESETPROP=/data/adb/ksu/bin/resetprop
@@ -13,65 +13,83 @@ reset_ro() {
   $RESETPROP -n "$1" "$2" 2>/dev/null || $RESETPROP "$1" "$2" 2>/dev/null || true
 }
 
-delete_prop() {
-  $RESETPROP --delete "$1" 2>/dev/null || true
-}
-
-backup_original_props() {
+load_profile() {
   moddir="$1"
-  bak="$moddir/state/original.props"
-  [ -f "$bak" ] && return 0
-  mkdir -p "$moddir/state"
-  {
-    echo "ro.kernel.qemu=$(getprop ro.kernel.qemu)"
-    echo "ro.boot.qemu=$(getprop ro.boot.qemu)"
-  } > "$bak" 2>/dev/null
+  profile=""
+  [ -f "$moddir/profile.conf" ] && \
+    profile=$(grep -E '^profile=' "$moddir/profile.conf" 2>/dev/null | head -n1 | cut -d= -f2 | tr -d ' "\r')
+  case "$profile" in
+    pixel7|panther)
+      CODENAME=panther
+      MODEL="Pixel 7"
+      ;;
+    pixel9a|tegu)
+      CODENAME=tegu
+      MODEL="Pixel 9a"
+      ;;
+    pixel9proxl|komodo|pantah)
+      CODENAME=komodo
+      MODEL="Pixel 9 Pro XL"
+      ;;
+    pixel9|tokay|*)
+      CODENAME=tokay
+      MODEL="Pixel 9"
+      ;;
+  esac
 }
 
-# Proven minimal set — NO fingerprint / device / hardware change (prevents crash)
-virtus_apply_emulator_hide() {
+virtus_qemu_core() {
   reset_ro ro.kernel.qemu 0
   reset_ro ro.boot.qemu 0
   reset_ro qemu.hw.mainkeys 0
   reset_ro init.svc.qemud stopped
   reset_ro ro.kernel.android.qemud null
+  reset_ro ro.build.characteristics nosdcard
+  reset_ro ro.boot.mode normal
+  reset_ro ro.hardware pixel
+  reset_ro ro.boot.hardware pixel
+}
 
-  delete_prop ro.boot.qemu.avd_name
-  delete_prop ro.boot.qemu.settings.android.avd_name
-  delete_prop ro.boot.qemu.virt_model
-  delete_prop ro.boot.qemu.vsync
-  delete_prop ro.kernel.qemu.gles
-  delete_prop ro.kernel.su
-  delete_prop init.svc.qemu-props
-  delete_prop init.svc.goldfish-logcat
-  delete_prop init.svc.goldfish-setup
-  delete_prop init.svc.qemud
+# Pixel AVD — qemu hide only, real device + fingerprint untouched (no crash)
+virtus_apply_pixel_safe() {
+  virtus_qemu_core
+  reset_ro ro.build.tags release-keys
+  reset_ro ro.build.type user
+  echo "safe:$CODENAME"
+}
 
-  echo "emu-ok"
+# Generic emulator — full FreeRecharge spoof but REAL fingerprint from device
+virtus_apply_full_safe() {
+  moddir="$1"
+  real_fp=$(getprop ro.build.fingerprint)
+  [ -z "$real_fp" ] && real_fp="google/$CODENAME/$CODENAME:16/BP31.250610.009/12345678:user/release-keys"
+
+  virtus_qemu_core
+  reset_ro ro.product.device "$CODENAME"
+  reset_ro ro.vendor.product.device "$CODENAME"
+  reset_ro ro.product.model "$MODEL"
+  reset_ro ro.product.brand google
+  reset_ro ro.product.manufacturer Google
+  reset_ro ro.build.fingerprint "$real_fp"
+  reset_ro ro.build.tags release-keys
+  reset_ro ro.build.type user
+  echo "full:$CODENAME"
 }
 
 virtus_apply_all() {
   moddir="$1"
-  backup_original_props "$moddir"
-  virtus_apply_emulator_hide
+  load_profile "$moddir"
+  cur_dev=$(getprop ro.product.device)
+
+  if [ "$cur_dev" = "$CODENAME" ] || [ "$cur_dev" = "panther" ] || [ "$cur_dev" = "tegu" ] || [ "$cur_dev" = "tokay" ] || [ "$cur_dev" = "komodo" ]; then
+    virtus_apply_pixel_safe
+  else
+    virtus_apply_full_safe "$moddir"
+  fi
 }
 
 virtus_restore_props() {
-  moddir="$1"
-  bak="$moddir/state/original.props"
-  if [ ! -f "$bak" ]; then
-    echo "no-backup"
-    return 1
-  fi
-  while IFS= read -r line || [ -n "$line" ]; do
-    key=${line%%=*}
-    val=${line#*=}
-    [ -z "$key" ] && continue
-    [ "$key" = "$line" ] && continue
-    reset_ro "$key" "$val"
-  done < "$bak"
-  echo "restored"
-  return 0
+  :
 }
 
 update_module_status() {
@@ -112,10 +130,10 @@ update_module_status() {
 
 read_boot_config() {
   moddir="$1"
-  BOOT_APPLY=0
+  BOOT_APPLY=1
   [ -f "$moddir/profile.conf" ] || return 0
   ba=$(grep -E '^boot_apply=' "$moddir/profile.conf" 2>/dev/null | head -n1 | cut -d= -f2 | tr -d ' "\r')
-  [ "$ba" = "1" ] && BOOT_APPLY=1
+  [ "$ba" = "0" ] && BOOT_APPLY=0
 }
 
 apply_all_props() {
