@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# VirtusFix v8 — emulator detection hide ONLY (no universal root hide)
+# VirtusFix v8.1 — crash-safe emulator detection hide (minimal props only)
 
 if [ -x /data/adb/ksu/bin/resetprop ]; then
   RESETPROP=/data/adb/ksu/bin/resetprop
@@ -25,27 +25,29 @@ backup_original_props() {
   {
     echo "ro.kernel.qemu=$(getprop ro.kernel.qemu)"
     echo "ro.boot.qemu=$(getprop ro.boot.qemu)"
-    echo "ro.hardware=$(getprop ro.hardware)"
-    echo "ro.boot.hardware=$(getprop ro.boot.hardware)"
   } > "$bak" 2>/dev/null
 }
 
-# Emulator detection hide — fingerprint/device change NAHI (no crash)
+# Proven minimal set — NO fingerprint / device / hardware change (prevents crash)
 virtus_apply_emulator_hide() {
   reset_ro ro.kernel.qemu 0
   reset_ro ro.boot.qemu 0
   reset_ro qemu.hw.mainkeys 0
   reset_ro init.svc.qemud stopped
   reset_ro ro.kernel.android.qemud null
-  reset_ro ro.boot.mode normal
+
   delete_prop ro.boot.qemu.avd_name
   delete_prop ro.boot.qemu.settings.android.avd_name
   delete_prop ro.boot.qemu.virt_model
+  delete_prop ro.boot.qemu.vsync
+  delete_prop ro.kernel.qemu.gles
   delete_prop ro.kernel.su
   delete_prop init.svc.qemu-props
   delete_prop init.svc.goldfish-logcat
   delete_prop init.svc.goldfish-setup
-  echo "emu-hide"
+  delete_prop init.svc.qemud
+
+  echo "emu-ok"
 }
 
 virtus_apply_all() {

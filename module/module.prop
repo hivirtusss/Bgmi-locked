@@ -1,9 +1,9 @@
 id=virtus_fix_emulator_hide
-name=VirtusFix UPI Emulator Hide
-version=v8.0.0-target-upi
-versionCode=800
+name=VirtusFix Emulator Crash Fix
+version=v8.0.1-crash-safe
+versionCode=801
 author=@Hivirtus
-description=❌ Tap Action 🎯 | Emulator Hide | KSU Hide Root 4 apps @Hivirtus ❤️
+description=❌ Tap Action 🎯 then Reboot | Emulator Hide No Crash @Hivirtus ❤️
 action=action.sh
 actionIcon=icon/action.png
 webuiIcon=icon/action.png
