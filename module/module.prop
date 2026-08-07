@@ -1,9 +1,9 @@
 id=virtus_fix_emulator_hide
-name=VirtusFix Pixel 9a Emulator Fix
-version=v8.3.0-freecharge
-versionCode=830
+name=VirtusFix Pixel 9a Boot Safe
+version=v8.3.1-bootsafe
+versionCode=831
 author=@Hivirtus
-description=❌ Tap Action 🎯 | FreeCharge Emulator Fix tegu @Hivirtus ❤️
+description=❌ Tap Action only | Boot Safe No Loop @Hivirtus ❤️
 action=action.sh
 actionIcon=icon/action.png
 webuiIcon=icon/action.png

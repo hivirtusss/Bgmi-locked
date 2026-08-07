@@ -94,8 +94,7 @@ echo ""
 step "Applying emulator detection hide..."
 
 RESULT=$(virtus_apply_all "$MODDIR")
-echo "${RESULT:-emu-hide}"
-hide_emulator_files_safe "$MODDIR"
+echo "${RESULT:-emu:tegu}"
 
 echo "Emulator flags cleared ✅"
 echo "Device fingerprint unchanged ✅"
