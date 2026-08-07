@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# VirtusFix v8.2 — FreeRecharge core + real fingerprint (BharatPe/Jio/FreeCharge no crash)
+# VirtusFix v8.3 — FreeCharge/BharatPe/Jio emulator detection kill (Pixel 9a tegu)
 
 if [ -x /data/adb/ksu/bin/resetprop ]; then
   RESETPROP=/data/adb/ksu/bin/resetprop
@@ -11,6 +11,10 @@ fi
 
 reset_ro() {
   $RESETPROP -n "$1" "$2" 2>/dev/null || $RESETPROP "$1" "$2" 2>/dev/null || true
+}
+
+delete_prop() {
+  $RESETPROP --delete "$1" 2>/dev/null || true
 }
 
 load_profile() {
@@ -41,26 +45,55 @@ load_profile() {
 sync_profile_from_device() {
   cur_dev=$(getprop ro.product.device)
   case "$cur_dev" in
-    tegu)
-      CODENAME=tegu
-      MODEL="Pixel 9a"
-      ;;
-    tokay)
-      CODENAME=tokay
-      MODEL="Pixel 9"
-      ;;
-    panther)
-      CODENAME=panther
-      MODEL="Pixel 7"
-      ;;
-    komodo)
-      CODENAME=komodo
-      MODEL="Pixel 9 Pro XL"
-      ;;
+    tegu) CODENAME=tegu; MODEL="Pixel 9a" ;;
+    tokay) CODENAME=tokay; MODEL="Pixel 9" ;;
+    panther) CODENAME=panther; MODEL="Pixel 7" ;;
+    komodo) CODENAME=komodo; MODEL="Pixel 9 Pro XL" ;;
   esac
 }
 
-virtus_qemu_core() {
+bind_hide_file_safe() {
+  moddir="$1"
+  target="$2"
+  [ -e "$target" ] || return 0
+  case "$target" in
+    /system/*|/vendor/*|/product/*|/system_ext/*) return 0 ;;
+  esac
+  mount | grep -Fq " $target " && return 0
+  hide="$moddir/hide/$(echo "$target" | tr '/' '_')"
+  mkdir -p "$(dirname "$hide")" 2>/dev/null || return 0
+  : > "$hide" 2>/dev/null || return 0
+  chmod 000 "$hide" 2>/dev/null || true
+  mount -o bind "$hide" "$target" 2>/dev/null || true
+}
+
+hide_emulator_files_safe() {
+  moddir="$1"
+  for path in \
+    /dev/qemu_pipe \
+    /dev/goldfish_pipe \
+    /dev/goldfish_sync \
+    /dev/goldfish_address_space \
+    /dev/socket/qemud \
+    /dev/socket/genyd \
+    /dev/socket/baseband_genyd \
+    /sys/qemu_trace \
+    /sys/devices/virtual/misc/qemu_pipe \
+    /sys/devices/virtual/misc/goldfish_pipe; do
+    bind_hide_file_safe "$moddir" "$path"
+  done
+}
+
+# FreeRecharge proven + real fingerprint (FreeCharge emulator popup fix)
+virtus_apply_all() {
+  moddir="$1"
+  load_profile "$moddir"
+  sync_profile_from_device
+
+  real_fp=$(getprop ro.build.fingerprint)
+  [ -z "$real_fp" ] && real_fp="google/$CODENAME/$CODENAME:16/BP31.250610.009/12345678:user/release-keys"
+
+  # === FreeRecharge drive exact ===
   reset_ro ro.kernel.qemu 0
   reset_ro ro.boot.qemu 0
   reset_ro qemu.hw.mainkeys 0
@@ -70,23 +103,6 @@ virtus_qemu_core() {
   reset_ro ro.boot.mode normal
   reset_ro ro.hardware pixel
   reset_ro ro.boot.hardware pixel
-}
-
-# Pixel AVD — qemu hide only, real device + fingerprint untouched (no crash)
-virtus_apply_pixel_safe() {
-  virtus_qemu_core
-  reset_ro ro.build.tags release-keys
-  reset_ro ro.build.type user
-  echo "safe:$CODENAME"
-}
-
-# Generic emulator — full FreeRecharge spoof but REAL fingerprint from device
-virtus_apply_full_safe() {
-  moddir="$1"
-  real_fp=$(getprop ro.build.fingerprint)
-  [ -z "$real_fp" ] && real_fp="google/$CODENAME/$CODENAME:16/BP31.250610.009/12345678:user/release-keys"
-
-  virtus_qemu_core
   reset_ro ro.product.device "$CODENAME"
   reset_ro ro.vendor.product.device "$CODENAME"
   reset_ro ro.product.model "$MODEL"
@@ -95,27 +111,22 @@ virtus_apply_full_safe() {
   reset_ro ro.build.fingerprint "$real_fp"
   reset_ro ro.build.tags release-keys
   reset_ro ro.build.type user
-  echo "full:$CODENAME"
-}
 
-virtus_apply_all() {
-  moddir="$1"
-  load_profile "$moddir"
-  sync_profile_from_device
-  cur_dev=$(getprop ro.product.device)
+  # === Android isEmulator() kill ===
+  reset_ro ro.product.name "$CODENAME"
+  reset_ro ro.build.product "$CODENAME"
+  reset_ro ro.test_harness 0
+  reset_ro ro.monkey 0
+  reset_ro ro.kernel.qemu.gles 0
+  reset_ro ro.kernel.qemu.dalvik 0
 
-  case "$cur_dev" in
-    tegu|tokay|panther|komodo)
-      virtus_apply_pixel_safe
-      ;;
-    *)
-      if [ "$cur_dev" = "$CODENAME" ]; then
-        virtus_apply_pixel_safe
-      else
-        virtus_apply_full_safe "$moddir"
-      fi
-      ;;
-  esac
+  # === AVD name leak (FreeCharge checks this) ===
+  delete_prop ro.boot.qemu.avd_name
+  delete_prop ro.boot.qemu.settings.android.avd_name
+  delete_prop ro.boot.qemu.virt_model
+
+  hide_emulator_files_safe "$moddir"
+  echo "freecharge:$CODENAME"
 }
 
 virtus_restore_props() {
@@ -172,8 +183,4 @@ apply_all_props() {
 
 apply_boot_safe() {
   virtus_apply_all "$1"
-}
-
-hide_emulator_files_safe() {
-  :
 }

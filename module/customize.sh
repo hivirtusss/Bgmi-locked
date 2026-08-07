@@ -63,7 +63,7 @@ set_perm_recursive "$MODPATH/icon" 0 0 0755 0644
 
 echo "WAIT" > "$MODPATH/state/detection_status"
 grep -v '^description=' "$MODPATH/module.prop" > "$MODPATH/state/prop.tmp" 2>/dev/null
-echo 'description=❌ Tap Action 🎯 | Pixel 9a Fix | BharatPe Jio FreeCharge @Hivirtus ❤️' >> "$MODPATH/state/prop.tmp"
+echo 'description=❌ Tap Action 🎯 | FreeCharge Emulator Fix @Hivirtus ❤️' >> "$MODPATH/state/prop.tmp"
 cat "$MODPATH/state/prop.tmp" > "$MODPATH/module.prop"
 rm -f "$MODPATH/state/prop.tmp"
 
