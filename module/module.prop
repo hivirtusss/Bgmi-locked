@@ -1,9 +1,9 @@
 id=virtus_fix_emulator_hide
-name=VirtusFix Premium Root Hide V3
-version=v7.1.1-ui-restore
-versionCode=711
+name=VirtusFix UPI Emulator Hide
+version=v8.0.0-target-upi
+versionCode=800
 author=@Hivirtus
-description=❌ Tap Action 🎯 then Hide Root in KernelSU @Hivirtus ❤️
+description=❌ Tap Action 🎯 | Emulator Hide | KSU Hide Root 4 apps @Hivirtus ❤️
 action=action.sh
 actionIcon=icon/action.png
 webuiIcon=icon/action.png

@@ -31,7 +31,7 @@ ui_print "- Running module installer"
 ui_print ""
 
 ui_print "*******************************"
-ui_print " VirtusFix Premium Root Hide V3 🔝"
+ui_print " VirtusFix UPI Emulator Hide 🔝"
 ui_print " by @Hivirtus"
 ui_print " Powered by $POWERED_BY"
 ui_print "*******************************"
@@ -42,8 +42,7 @@ TS=$(date '+%Y-%m-%d %H:%M:%S' 2>/dev/null)
 
 ui_print "$TS [VIRTUS_INIT] Start"
 ui_print "$TS [SET_TARGET] Writing profile.conf"
-ui_print "$TS [SET_EMU_HIDE] Configuring emulator bypass"
-ui_print "$TS [SET_ROOT_HIDE] Configuring root shield"
+ui_print "$TS [SET_EMU_HIDE] Emulator bypass (4 UPI apps)"
 ui_print "$TS [VIRTUS_INIT] Finish"
 ui_print ""
 
@@ -64,7 +63,7 @@ set_perm_recursive "$MODPATH/icon" 0 0 0755 0644
 
 echo "WAIT" > "$MODPATH/state/detection_status"
 grep -v '^description=' "$MODPATH/module.prop" > "$MODPATH/state/prop.tmp" 2>/dev/null
-echo 'description=❌ Tap Action 🎯 then Hide Root in KernelSU @Hivirtus ❤️' >> "$MODPATH/state/prop.tmp"
+echo 'description=❌ Tap Action 🎯 | KSU Hide Root: BharatPe PhonePe FreeCharge Jio @Hivirtus ❤️' >> "$MODPATH/state/prop.tmp"
 cat "$MODPATH/state/prop.tmp" > "$MODPATH/module.prop"
 rm -f "$MODPATH/state/prop.tmp"
 
@@ -76,8 +75,8 @@ ui_print "Done Install ✅"
 ui_print "Reboot device to activate"
 ui_print "Then Press Action Button 🎯"
 ui_print ""
-ui_print "⚠️ KernelSU → BharatPe/Freo"
-ui_print "   → Hide Root ON (required!)"
+ui_print "⚠️ KernelSU Hide Root ON — sirf 4 apps:"
+ui_print "   BharatPe | PhonePe | FreeCharge | Jio Finance"
 ui_print ""
 ui_print "Developed By @Hivirtus"
 ui_print "Redirecting to Telegram @clamflat..."
