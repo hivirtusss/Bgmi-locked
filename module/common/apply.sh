@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# VirtusFix v8.3.1 — boot-safe (NO bootloop) + Action-only emulator hide
+# VirtusFix v9 — FreeRecharge + Canara-safe (real fingerprint, Action-only, no bootloop)
 
 if [ -x /data/adb/ksu/bin/resetprop ]; then
   RESETPROP=/data/adb/ksu/bin/resetprop
@@ -39,11 +39,14 @@ sync_profile_from_device() {
   esac
 }
 
-# Action only — NO file bind (bootloop fix), NO fingerprint change
+# FreeRecharge drive exact + real fingerprint (Canara APK uses in-app patch; this is system layer)
 virtus_apply_all() {
   moddir="$1"
   load_profile "$moddir"
   sync_profile_from_device
+
+  real_fp=$(getprop ro.build.fingerprint)
+  [ -z "$real_fp" ] && real_fp="google/$CODENAME/$CODENAME:16/BP31.250610.009/12345678:user/release-keys"
 
   reset_ro ro.kernel.qemu 0
   reset_ro ro.boot.qemu 0
@@ -54,13 +57,22 @@ virtus_apply_all() {
   reset_ro ro.boot.mode normal
   reset_ro ro.hardware pixel
   reset_ro ro.boot.hardware pixel
+  reset_ro ro.product.device "$CODENAME"
+  reset_ro ro.vendor.product.device "$CODENAME"
+  reset_ro ro.product.model "$MODEL"
+  reset_ro ro.product.brand google
+  reset_ro ro.product.manufacturer Google
+  reset_ro ro.build.fingerprint "$real_fp"
+  reset_ro ro.build.tags release-keys
+  reset_ro ro.build.type user
   reset_ro ro.test_harness 0
-  reset_ro ro.monkey 0
+  reset_ro ro.debuggable 0
+  reset_ro ro.secure 1
 
   delete_prop ro.boot.qemu.avd_name
   delete_prop ro.boot.qemu.settings.android.avd_name
 
-  echo "emu:$CODENAME"
+  echo "ok:$CODENAME"
 }
 
 update_module_status() {

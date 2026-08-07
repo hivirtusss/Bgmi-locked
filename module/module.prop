@@ -1,9 +1,7 @@
 id=virtus_fix_emulator_hide
-name=VirtusFix Pixel 9a Boot Safe
-version=v8.3.1-bootsafe
-versionCode=831
+name=VirtusFix Pixel 9a
+version=v9.0.0-slim
+versionCode=900
 author=@Hivirtus
-description=❌ Tap Action only | Boot Safe No Loop @Hivirtus ❤️
+description=❌ Tap Action 🎯 then Reboot | Pixel 9a tegu @Hivirtus ❤️
 action=action.sh
-actionIcon=icon/action.png
-webuiIcon=icon/action.png

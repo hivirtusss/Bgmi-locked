@@ -31,7 +31,7 @@ ui_print "- Running module installer"
 ui_print ""
 
 ui_print "*******************************"
-ui_print " VirtusFix UPI Emulator Hide 🔝"
+ui_print " VirtusFix Pixel 9a 🔝"
 ui_print " by @Hivirtus"
 ui_print " Powered by $POWERED_BY"
 ui_print "*******************************"
@@ -51,19 +51,16 @@ set_perm "$MODPATH/post-fs-data.sh" 0 0 0755
 set_perm "$MODPATH/service.sh" 0 0 0755
 set_perm "$MODPATH/boot-completed.sh" 0 0 0755
 set_perm "$MODPATH/action.sh" 0 0 0755
-set_perm "$MODPATH/uninstall.sh" 0 0 0755
 set_perm "$MODPATH/common/apply.sh" 0 0 0755
 set_perm "$MODPATH/common/safe_boot.sh" 0 0 0755
 set_perm "$MODPATH/profile.conf" 0 0 0644
 
 touch "$MODPATH/skip_mount"
-mkdir -p "$MODPATH/hide" "$MODPATH/state" "$MODPATH/icon"
-set_perm_recursive "$MODPATH/hide" 0 0 0700 0600
-set_perm_recursive "$MODPATH/icon" 0 0 0755 0644
+mkdir -p "$MODPATH/state"
 
 echo "WAIT" > "$MODPATH/state/detection_status"
 grep -v '^description=' "$MODPATH/module.prop" > "$MODPATH/state/prop.tmp" 2>/dev/null
-echo 'description=❌ Tap Action 🎯 | FreeCharge Emulator Fix @Hivirtus ❤️' >> "$MODPATH/state/prop.tmp"
+echo 'description=❌ Tap Action 🎯 then Reboot | Pixel 9a @Hivirtus ❤️' >> "$MODPATH/state/prop.tmp"
 cat "$MODPATH/state/prop.tmp" > "$MODPATH/module.prop"
 rm -f "$MODPATH/state/prop.tmp"
 
