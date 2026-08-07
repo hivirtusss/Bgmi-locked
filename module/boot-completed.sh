@@ -1,3 +1,3 @@
 #!/system/bin/sh
-# Disabled — file hide + boot props caused bootloop
+# Disabled
 exit 0

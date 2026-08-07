@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# VirtusFix v9 — FreeRecharge + Canara-safe (real fingerprint, Action-only, no bootloop)
+# VirtusFix v9.1 — FreeRecharge exact + boot apply (FreeCharge emulator fix)
 
 if [ -x /data/adb/ksu/bin/resetprop ]; then
   RESETPROP=/data/adb/ksu/bin/resetprop
@@ -26,7 +26,8 @@ load_profile() {
     pixel7|panther) CODENAME=panther; MODEL="Pixel 7" ;;
     pixel9|tokay) CODENAME=tokay; MODEL="Pixel 9" ;;
     pixel9proxl|komodo|pantah) CODENAME=komodo; MODEL="Pixel 9 Pro XL" ;;
-    pixel9a|tegu|*) CODENAME=tegu; MODEL="Pixel 9a" ;;
+    pixel9a|tegu) CODENAME=tegu; MODEL="Pixel 9a" ;;
+    *) CODENAME=tegu; MODEL="Pixel 9a" ;;
   esac
 }
 
@@ -39,7 +40,6 @@ sync_profile_from_device() {
   esac
 }
 
-# FreeRecharge drive exact + real fingerprint (Canara APK uses in-app patch; this is system layer)
 virtus_apply_all() {
   moddir="$1"
   load_profile "$moddir"
@@ -48,6 +48,7 @@ virtus_apply_all() {
   real_fp=$(getprop ro.build.fingerprint)
   [ -z "$real_fp" ] && real_fp="google/$CODENAME/$CODENAME:16/BP31.250610.009/12345678:user/release-keys"
 
+  # FreeRecharge drive exact (proven FreeCharge emulator fix)
   reset_ro ro.kernel.qemu 0
   reset_ro ro.boot.qemu 0
   reset_ro qemu.hw.mainkeys 0
@@ -65,12 +66,20 @@ virtus_apply_all() {
   reset_ro ro.build.fingerprint "$real_fp"
   reset_ro ro.build.tags release-keys
   reset_ro ro.build.type user
+
+  # Extra emulator leak fix
+  reset_ro ro.product.name "$CODENAME"
+  reset_ro ro.build.product "$CODENAME"
   reset_ro ro.test_harness 0
+  reset_ro ro.monkey 0
   reset_ro ro.debuggable 0
   reset_ro ro.secure 1
+  reset_ro ro.kernel.qemu.gles 0
+  reset_ro ro.kernel.qemu.dalvik 0
 
   delete_prop ro.boot.qemu.avd_name
   delete_prop ro.boot.qemu.settings.android.avd_name
+  delete_prop ro.boot.qemu.virt_model
 
   echo "ok:$CODENAME"
 }
@@ -111,10 +120,10 @@ update_module_status() {
 
 read_boot_config() {
   moddir="$1"
-  BOOT_APPLY=0
+  BOOT_APPLY=1
   [ -f "$moddir/profile.conf" ] || return 0
   ba=$(grep -E '^boot_apply=' "$moddir/profile.conf" 2>/dev/null | head -n1 | cut -d= -f2 | tr -d ' "\r')
-  [ "$ba" = "1" ] && BOOT_APPLY=1
+  [ "$ba" = "0" ] && BOOT_APPLY=0
 }
 
 apply_all_props() { virtus_apply_all "$1"; }

@@ -1,3 +1,3 @@
 #!/system/bin/sh
-# Disabled — caused bootloop
+# Disabled
 exit 0

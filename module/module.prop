@@ -1,7 +1,7 @@
 id=virtus_fix_emulator_hide
 name=VirtusFix Pixel 9a
-version=v9.0.0-slim
-versionCode=900
+version=v9.1.0-fix
+versionCode=910
 author=@Hivirtus
-description=❌ Tap Action 🎯 then Reboot | Pixel 9a tegu @Hivirtus ❤️
+description=Tap Action then Reboot | FreeCharge Emulator Fix @Hivirtus
 action=action.sh

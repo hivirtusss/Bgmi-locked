@@ -31,7 +31,7 @@ ui_print "- Running module installer"
 ui_print ""
 
 ui_print "*******************************"
-ui_print " VirtusFix Pixel 9a 🔝"
+ui_print " VirtusFix Pixel 9a"
 ui_print " by @Hivirtus"
 ui_print " Powered by $POWERED_BY"
 ui_print "*******************************"
@@ -60,7 +60,7 @@ mkdir -p "$MODPATH/state"
 
 echo "WAIT" > "$MODPATH/state/detection_status"
 grep -v '^description=' "$MODPATH/module.prop" > "$MODPATH/state/prop.tmp" 2>/dev/null
-echo 'description=❌ Tap Action 🎯 then Reboot | Pixel 9a @Hivirtus ❤️' >> "$MODPATH/state/prop.tmp"
+echo 'description=Tap Action then Reboot | FreeCharge Fix @Hivirtus' >> "$MODPATH/state/prop.tmp"
 cat "$MODPATH/state/prop.tmp" > "$MODPATH/module.prop"
 rm -f "$MODPATH/state/prop.tmp"
 
