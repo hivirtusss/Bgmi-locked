@@ -1,9 +1,9 @@
 id=virtus_fix_emulator_hide
-name=VirtusFix Emulator Crash Fix
-version=v8.2.0-banking
-versionCode=820
+name=VirtusFix Pixel 9a Emulator Fix
+version=v8.2.1-pixel9a
+versionCode=821
 author=@Hivirtus
-description=❌ Tap Action 🎯 | BharatPe Jio FreeCharge Fix @Hivirtus ❤️
+description=❌ Tap Action 🎯 | Pixel 9a tegu | BharatPe Jio FreeCharge @Hivirtus ❤️
 action=action.sh
 actionIcon=icon/action.png
 webuiIcon=icon/action.png

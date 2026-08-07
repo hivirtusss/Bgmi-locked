@@ -41,7 +41,7 @@ TS=$(date '+%Y-%m-%d %H:%M:%S' 2>/dev/null)
 [ -z "$TS" ] && TS="boot"
 
 ui_print "$TS [VIRTUS_INIT] Start"
-ui_print "$TS [SET_TARGET] Writing profile.conf"
+ui_print "$TS [SET_TARGET] Pixel 9a (tegu) profile"
 ui_print "$TS [SET_EMU_HIDE] Emulator bypass (4 UPI apps)"
 ui_print "$TS [VIRTUS_INIT] Finish"
 ui_print ""
@@ -63,7 +63,7 @@ set_perm_recursive "$MODPATH/icon" 0 0 0755 0644
 
 echo "WAIT" > "$MODPATH/state/detection_status"
 grep -v '^description=' "$MODPATH/module.prop" > "$MODPATH/state/prop.tmp" 2>/dev/null
-echo 'description=❌ Tap Action 🎯 | BharatPe Jio FreeCharge Fix @Hivirtus ❤️' >> "$MODPATH/state/prop.tmp"
+echo 'description=❌ Tap Action 🎯 | Pixel 9a Fix | BharatPe Jio FreeCharge @Hivirtus ❤️' >> "$MODPATH/state/prop.tmp"
 cat "$MODPATH/state/prop.tmp" > "$MODPATH/module.prop"
 rm -f "$MODPATH/state/prop.tmp"
 

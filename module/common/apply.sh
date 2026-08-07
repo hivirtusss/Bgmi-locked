@@ -23,17 +23,39 @@ load_profile() {
       CODENAME=panther
       MODEL="Pixel 7"
       ;;
-    pixel9a|tegu)
-      CODENAME=tegu
-      MODEL="Pixel 9a"
+    pixel9|tokay)
+      CODENAME=tokay
+      MODEL="Pixel 9"
       ;;
     pixel9proxl|komodo|pantah)
       CODENAME=komodo
       MODEL="Pixel 9 Pro XL"
       ;;
-    pixel9|tokay|*)
+    pixel9a|tegu|*)
+      CODENAME=tegu
+      MODEL="Pixel 9a"
+      ;;
+  esac
+}
+
+sync_profile_from_device() {
+  cur_dev=$(getprop ro.product.device)
+  case "$cur_dev" in
+    tegu)
+      CODENAME=tegu
+      MODEL="Pixel 9a"
+      ;;
+    tokay)
       CODENAME=tokay
       MODEL="Pixel 9"
+      ;;
+    panther)
+      CODENAME=panther
+      MODEL="Pixel 7"
+      ;;
+    komodo)
+      CODENAME=komodo
+      MODEL="Pixel 9 Pro XL"
       ;;
   esac
 }
@@ -79,13 +101,21 @@ virtus_apply_full_safe() {
 virtus_apply_all() {
   moddir="$1"
   load_profile "$moddir"
+  sync_profile_from_device
   cur_dev=$(getprop ro.product.device)
 
-  if [ "$cur_dev" = "$CODENAME" ] || [ "$cur_dev" = "panther" ] || [ "$cur_dev" = "tegu" ] || [ "$cur_dev" = "tokay" ] || [ "$cur_dev" = "komodo" ]; then
-    virtus_apply_pixel_safe
-  else
-    virtus_apply_full_safe "$moddir"
-  fi
+  case "$cur_dev" in
+    tegu|tokay|panther|komodo)
+      virtus_apply_pixel_safe
+      ;;
+    *)
+      if [ "$cur_dev" = "$CODENAME" ]; then
+        virtus_apply_pixel_safe
+      else
+        virtus_apply_full_safe "$moddir"
+      fi
+      ;;
+  esac
 }
 
 virtus_restore_props() {
